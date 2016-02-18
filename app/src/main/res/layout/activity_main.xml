@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="course.programming.mobile.com.ledcontrol.MainActivity">
+    tools:context="fi.aalto.mobilesystems.ledcontrol.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"

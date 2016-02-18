@@ -1,4 +1,4 @@
-package course.programming.mobile.com.ledcontrol;
+package fi.aalto.mobilesystems.ledcontrol;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
