@@ -1,5 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.hue;
 
+import android.util.Log;
+
 import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHSDKListener;
@@ -10,6 +12,7 @@ import com.philips.lighting.model.PHHueParsingError;
 import java.util.List;
 
 public class HueController {
+    private static final String TAG = "HueController";
     private PHHueSDK sdk;
     private HueController instance;
 
@@ -17,9 +20,11 @@ public class HueController {
         this.sdk  = PHHueSDK.create();
         this.sdk.getNotificationManager().registerSDKListener(this.hueListener);
         this.instance = this;
+        Log.d(TAG, "HueController created");
     }
 
     private PHSDKListener hueListener = new PHSDKListener() {
+        private static final String TAG = "HueListener";
         @Override
         public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
 
@@ -27,10 +32,13 @@ public class HueController {
 
         @Override
         public void onBridgeConnected(PHBridge phBridge, String username) {
+            Log.d(TAG, "Bridge connected");
             sdk.setSelectedBridge(phBridge);
             sdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
+            String ipAddress = phBridge.getResourceCache().getBridgeConfiguration().getIpAddress();
             HueProperties.setUsername(username);
-            HueProperties.setIpAddress(phBridge.getResourceCache().getBridgeConfiguration().getIpAddress());
+            HueProperties.setIpAddress(ipAddress);
+            Log.d(TAG, "Bridge connected with username: " + username + ", IP: " + ipAddress);
         }
 
         @Override
@@ -45,23 +53,24 @@ public class HueController {
 
         @Override
         public void onError(int i, String s) {
-            System.out.println(Integer.toString(i) + ": " + hueErrorToString(i) + " - " + s);
+            Log.e(TAG, Integer.toString(i) + ": " + hueErrorToString(i) + " - " + s);
         }
 
         @Override
         public void onConnectionResumed(PHBridge phBridge) {
-
+            Log.d(TAG, "Connection resumed");
         }
 
         @Override
         public void onConnectionLost(PHAccessPoint phAccessPoint) {
-
+            Log.d(TAG, "Connection lost");
         }
 
         @Override
         public void onParsingErrors(List<PHHueParsingError> parsingErrorList) {
+            Log.e(TAG, "Parsing error(s) occurred");
             for (PHHueParsingError error : parsingErrorList) {
-                System.out.println("Parsing error: " + error.getMessage());
+                Log.d(TAG, "Parsing error: " + error.getMessage());
             }
         }
     };

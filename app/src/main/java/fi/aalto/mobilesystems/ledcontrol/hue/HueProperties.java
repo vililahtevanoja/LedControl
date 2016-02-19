@@ -1,5 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.hue;
 
+import android.util.Log;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.util.Properties;
 
 public class HueProperties {
     private HueProperties(){}
+    private static final String TAG = "HueController";
     private static Properties props = null;
     private final static String propertiesFile = "";
     private final static String USERNAME_KEY = "username";
@@ -41,7 +44,7 @@ public class HueProperties {
                 in.close();
             }
         } catch (IOException ex) {
-
+            Log.e(TAG, "Error while loading properties", ex);
         }
     }
 
@@ -55,7 +58,7 @@ public class HueProperties {
                 out.close();
             }
         } catch (IOException ex) {
-
+            Log.e(TAG, "Error while saving properties", ex);
         }
     }
 }
