@@ -3,6 +3,7 @@
     package="fi.aalto.mobilesystems.ledcontrol">
 
     <application
+        android:name="fi.aalto.mobilesystems.ledcontrol.LedControl"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
