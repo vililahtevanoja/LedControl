@@ -10,9 +10,6 @@ import com.philips.lighting.model.PHHueParsingError;
 
 import java.util.List;
 
-/**
- * Created by vili on 23/02/16.
- */
 public class HueListener implements PHSDKListener {
     private static final String TAG = "HueListener";
     private PHHueSDK sdk;
