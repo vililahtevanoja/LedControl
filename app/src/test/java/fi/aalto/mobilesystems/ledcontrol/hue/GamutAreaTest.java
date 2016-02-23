@@ -1,8 +1,5 @@
 package fi.aalto.mobilesystems.ledcontrol.hue;
 
-
-import com.philips.lighting.hue.sdk.utilities.impl.PointF;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;
