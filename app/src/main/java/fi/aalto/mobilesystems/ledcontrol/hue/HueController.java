@@ -2,80 +2,25 @@ package fi.aalto.mobilesystems.ledcontrol.hue;
 
 import android.util.Log;
 
-import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHSDKListener;
-import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHHueError;
-import com.philips.lighting.model.PHHueParsingError;
-
-import java.util.List;
 
 public class HueController {
     private static final String TAG = "HueController";
     private PHHueSDK sdk;
     private HueController instance;
+    private PHSDKListener listener;
 
     public HueController() {
         this.sdk  = PHHueSDK.create();
-        this.sdk.getNotificationManager().registerSDKListener(this.hueListener);
+        this.listener = new HueListener(sdk);
+        this.sdk.getNotificationManager().registerSDKListener(this.listener);
         this.instance = this;
         Log.d(TAG, "HueController created");
     }
 
-    private PHSDKListener hueListener = new PHSDKListener() {
-        private static final String TAG = "HueListener";
-        @Override
-        public void onCacheUpdated(List<Integer> list, PHBridge phBridge) {
-
-        }
-
-        @Override
-        public void onBridgeConnected(PHBridge phBridge, String username) {
-            Log.d(TAG, "Bridge connected");
-            sdk.setSelectedBridge(phBridge);
-            sdk.enableHeartbeat(phBridge, PHHueSDK.HB_INTERVAL);
-            String ipAddress = phBridge.getResourceCache().getBridgeConfiguration().getIpAddress();
-            HueProperties.setUsername(username);
-            HueProperties.setIpAddress(ipAddress);
-            Log.d(TAG, "Bridge connected with username: " + username + ", IP: " + ipAddress);
-        }
-
-        @Override
-        public void onAuthenticationRequired(PHAccessPoint phAccessPoint) {
-            sdk.startPushlinkAuthentication(phAccessPoint);
-        }
-
-        @Override
-        public void onAccessPointsFound(List<PHAccessPoint> accessPointList) {
-
-        }
-
-        @Override
-        public void onError(int i, String s) {
-            Log.e(TAG, Integer.toString(i) + ": " + hueErrorToString(i) + " - " + s);
-        }
-
-        @Override
-        public void onConnectionResumed(PHBridge phBridge) {
-            Log.d(TAG, "Connection resumed");
-        }
-
-        @Override
-        public void onConnectionLost(PHAccessPoint phAccessPoint) {
-            Log.d(TAG, "Connection lost");
-        }
-
-        @Override
-        public void onParsingErrors(List<PHHueParsingError> parsingErrorList) {
-            Log.e(TAG, "Parsing error(s) occurred");
-            for (PHHueParsingError error : parsingErrorList) {
-                Log.d(TAG, "Parsing error: " + error.getMessage());
-            }
-        }
-    };
-
-    public String hueErrorToString(int code) {
+    public static String hueErrorToString(int code) {
         String errorStr = "";
         switch (code) {
             case PHHueError.NO_CONNECTION:
@@ -176,7 +121,7 @@ public class HueController {
     }
 
     public PHSDKListener getHueListener() {
-        return hueListener;
+        return listener;
     }
 
     public HueController getInstance() {
