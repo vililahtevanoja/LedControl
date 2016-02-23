@@ -19,6 +19,7 @@ public class HueListener implements PHSDKListener {
 
     public HueListener(PHHueSDK sdk) {
         this.sdk = sdk;
+        Log.i(TAG, "HueListener created");
     }
 
     @Override
