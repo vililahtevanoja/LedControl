@@ -1,7 +1,5 @@
 package fi.aalto.mobilesystems.ledcontrol.hue;
 
-import com.philips.lighting.hue.sdk.utilities.impl.PointF;
-
 /**
  * Class for Philips Hue light gamut areas
  */
