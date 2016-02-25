@@ -9,6 +9,10 @@ public class PointF extends com.philips.lighting.hue.sdk.utilities.impl.PointF {
         this.y = y;
     }
 
+    public PointF(PointF p) {
+        this(p.x, p.y);
+    }
+
     public boolean equals(PointF p) {
         return (this.x == p.x) && (this.y == p.y);
     }
