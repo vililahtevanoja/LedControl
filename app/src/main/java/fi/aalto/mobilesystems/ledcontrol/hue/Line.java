@@ -12,10 +12,22 @@ public class Line {
         this.b = b;
     }
 
+    public Line(Line line) {
+        this(line.getA(), line.getB());
+    }
+
+    public PointF getA() {
+        return new PointF(a);
+    }
+
+    public PointF getB() {
+        return new PointF(b);
+    }
+
     /**
      * Get point n-way through a line
-     * @param n
-     * @return
+     * @param n Ratio for the point on the line. e.g. 0.5 is halfway, 1/3 is third of the way
+     * @return Calculated point on the line
      */
     public PointF getPointOnLine(float n) {
         float x = (1 - n) * a.x + n * b.x;
