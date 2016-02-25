@@ -17,5 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         HueProperties.loadProperties();
         this.handler = new HueController();
+        this.handler.startBridgeSearch();
+        this.handler.connectToEmulatorAccessPoint();
     }
 }

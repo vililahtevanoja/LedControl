@@ -27,12 +27,15 @@ public class HueController {
         this.listener = new HueListener(sdk);
         this.sdk.getNotificationManager().registerSDKListener(this.listener);
         this.instance = this;
+        Log.d(TAG, "HueController created");
+        testRequestToApi();
+    }
+
+    public void connectToEmulatorAccessPoint() {
         PHAccessPoint ap = new PHAccessPoint();
         ap.setIpAddress("10.0.2.2:8000");   // Philips Hue Emulator address
         ap.setUsername("newdeveloper");
         this.sdk.connect(ap);
-        Log.d(TAG, "HueController created");
-        testRequestToApi();
     }
 
     public static void testRequestToApi() {
