@@ -6,6 +6,7 @@ import com.philips.lighting.hue.sdk.PHAccessPoint;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHBridgeConfiguration;
 import com.philips.lighting.model.PHHueParsingError;
 
 import java.util.List;
@@ -56,12 +57,13 @@ public class HueListener implements PHSDKListener {
 
     @Override
     public void onError(int i, String s) {
-        Log.e(TAG, Integer.toString(i) + ": " + HueController.hueErrorToString(i) + " - " + s);
+        Log.e(TAG, "ERROR " +  Integer.toString(i) + ": " + HueController.hueErrorToString(i) + " - " + s);
     }
 
     @Override
     public void onConnectionResumed(PHBridge phBridge) {
-        Log.d(TAG, "Connection resumed");
+        PHBridgeConfiguration bridgeConf = phBridge.getResourceCache().getBridgeConfiguration();
+        Log.d(TAG, "Connection resumed to " + bridgeConf.getBridgeID() + "@" + bridgeConf.getIpAddress());
     }
 
     @Override

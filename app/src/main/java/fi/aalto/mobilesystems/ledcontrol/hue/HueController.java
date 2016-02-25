@@ -2,9 +2,19 @@ package fi.aalto.mobilesystems.ledcontrol.hue;
 
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.philips.lighting.hue.sdk.PHAccessPoint;
+import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHHueError;
+
+import fi.aalto.mobilesystems.ledcontrol.LedControl;
 
 public class HueController {
     private static final String TAG = "HueController";
@@ -17,7 +27,30 @@ public class HueController {
         this.listener = new HueListener(sdk);
         this.sdk.getNotificationManager().registerSDKListener(this.listener);
         this.instance = this;
+        PHAccessPoint ap = new PHAccessPoint();
+        ap.setIpAddress("10.0.2.2:8000");   // Philips Hue Emulator address
+        ap.setUsername("newdeveloper");
+        this.sdk.connect(ap);
         Log.d(TAG, "HueController created");
+        testRequestToApi();
+    }
+
+    public static void testRequestToApi() {
+        RequestQueue queue = Volley.newRequestQueue(LedControl.getContext());
+        String url = "http://10.0.2.2:8000/api/newdeveloper/";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(TAG, "Response is: "+ response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error on response: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
     }
 
     public static String hueErrorToString(int code) {
@@ -118,6 +151,11 @@ public class HueController {
                 break;
         }
         return errorStr;
+    }
+
+    public void startBridgeSearch() {
+        PHBridgeSearchManager sm = (PHBridgeSearchManager) this.sdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+        sm.search(true, true);
     }
 
     public PHSDKListener getHueListener() {
