@@ -2,4 +2,5 @@ language: android
 android:
     - build-tools-21.1.2
     - android-21
+    - extra-google-google_play_services
     - sys-img-armeabi-v7a-android-21
