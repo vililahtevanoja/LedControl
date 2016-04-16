@@ -1,4 +1,4 @@
-package fi.aalto.mobilesystems.ledcontrol.hue;
+package fi.aalto.mobilesystems.ledcontrol.ledcontrol;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -85,5 +85,29 @@ public class Curve {
      */
     public void setPoints(List<PointF> points) {
         this.points = points;
+    }
+
+    public Curve refined(int resolution) {
+        return getQuadraticBezierCurve(resolution);
+    }
+
+    private Curve getQuadraticBezierCurve(int steps) {
+        Curve curve = new Curve();
+        int numberOfCurvePoints = this.points.size();
+        for (int i = 0; i <= numberOfCurvePoints - 3; i++) {
+            curve.addPoints(calculateQuadratizBezierCurvePoints(steps, points.get(i), points.get(i+1), points.get(i+2)));
+        }
+        return curve;
+    }
+
+    private List<PointF> calculateQuadratizBezierCurvePoints(int steps, PointF p1, PointF p2, PointF p3) {
+        LinkedList<PointF> ps = new LinkedList<>();
+        for (int j = 0; j <= steps; j++) {
+            float r = ((float)j) / steps;
+            float x = (1 - r) * (1 - r) * p1.x + 2 * (1 - r) * r * p2.x + r * r * p3.x;
+            float y = (1 - r) * (1 - r) * p1.y + 2 * (1 - r) * r * p2.y + r * r * p3.y;
+            ps.add(new PointF(x, y));
+        }
+        return ps;
     }
 }

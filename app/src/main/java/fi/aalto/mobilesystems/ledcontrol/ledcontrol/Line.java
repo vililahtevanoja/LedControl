@@ -1,4 +1,4 @@
-package fi.aalto.mobilesystems.ledcontrol.hue;
+package fi.aalto.mobilesystems.ledcontrol.ledcontrol;
 
 /**
  * Class for representing a line

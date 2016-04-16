@@ -1,4 +1,4 @@
-package fi.aalto.mobilesystems.ledcontrol.hue;
+package fi.aalto.mobilesystems.ledcontrol.ledcontrol;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
