@@ -1,7 +1,9 @@
 language: android
+before_install:
+    - android list sdk --no-ui --all --extended
 android:
     components:
-        - build-tools-23.0.2
-        - android-21
+        - build-tools-24.1.2
+        - android-22
         - extra-google-google_play_services
         - sys-img-armeabi-v7a-android-21
