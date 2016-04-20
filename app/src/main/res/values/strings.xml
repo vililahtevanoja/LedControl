@@ -5,6 +5,7 @@
     <string-array name="source_arrays">
         <item>Incoming Phone Call</item>
         <item>Incoming SMS</item>
+        <item>Alarm alert</item>
     </string-array>
 
 </resources>

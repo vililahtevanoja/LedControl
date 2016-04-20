@@ -29,6 +29,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         HandleBroadcastScene BroadcastScene = mApplication.getBroadcastScene();
         Map<PHLight, PHLightState> IncomingCallScene = BroadcastScene.getIncomingCallScene();
         Map<PHLight, PHLightState> IncomingSMSScene = BroadcastScene.getIncomingSMSScene();
+        Map<PHLight, PHLightState> AlarmAlert = BroadcastScene.getAlarmAlert();
 
         PHHueSDK sdk= PHHueSDK.getInstance();
         PHBridge bridge = sdk.getSelectedBridge();
@@ -51,7 +52,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             Iterator it = IncomingSMSScene.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
-                bridge.updateLightState((PHLight)pair.getKey(),(PHLightState)pair.getValue());
+                bridge.updateLightState((PHLight) pair.getKey(), (PHLightState) pair.getValue());
                // it.remove(); // avoids a ConcurrentModificationException
                 Log.d(TAG, "SMS_RECEIVED updateLightState SMS_RECEIVED");
             }
@@ -61,8 +62,19 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 bridge.updateLightState(light, lightState);
             }*/
             Toast.makeText(context, "SMS_RECEIVED Intent Detected.", Toast.LENGTH_LONG).show();
-
         }
+
+        if (intent.getAction().equals("com.android.deskclock.ALARM_ALERT")) {
+            Iterator it = AlarmAlert.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                bridge.updateLightState((PHLight)pair.getKey(),(PHLightState)pair.getValue());
+                // it.remove(); // avoids a ConcurrentModificationException
+                Log.d(TAG, "ALARM_ALERT updateLightState ALARM_ALERT");
+            }
+            Toast.makeText(context, "ALARM_ALERT Intent Detected.", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 }

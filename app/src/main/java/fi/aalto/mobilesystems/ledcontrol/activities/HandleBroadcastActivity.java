@@ -38,14 +38,14 @@ public class HandleBroadcastActivity extends AppCompatActivity {
     private int mColor;
     private PHHueSDK sdk;
     private List<PHLight> lights;
-    private HandleBroadcastScene mBrodcastScene;
+    private HandleBroadcastScene mBroadcastScene;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_broadcast);
         this.sdk = PHHueSDK.getInstance();
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
-        mBrodcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
+        mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
 
         addItemsOnSpinnerLight(lights);
         addListenerOnButton();
@@ -93,7 +93,7 @@ public class HandleBroadcastActivity extends AppCompatActivity {
                                     Color.red(mColor), Color.green(mColor), Color.blue(mColor), light.getModelNumber());
                             lightState.setX(xy[0]);
                             lightState.setY(xy[1]);
-                            mBrodcastScene.addIncomingCallScene(light, lightState);
+                            mBroadcastScene.addIncomingCallScene(light, lightState);
                             Log.d(TAG, "Incoming Phone call: add to scene");
                         }
                     }
@@ -109,8 +109,24 @@ public class HandleBroadcastActivity extends AppCompatActivity {
                                     Color.red(mColor), Color.green(mColor), Color.blue(mColor), light.getModelNumber());
                             lightState.setX(xy[0]);
                             lightState.setY(xy[1]);
-                            mBrodcastScene.addIncomingSMSScene(light, lightState);
+                            mBroadcastScene.addIncomingSMSScene(light, lightState);
                             Log.d(TAG, "Incoming SMS: add to scene");
+                        }
+                    }
+
+                }
+
+                if(spinnerSource.getSelectedItem().equals("Alarm alert")) {
+                    Log.d(TAG, "Alarm alert: spinnerSource");
+                    PHLightState lightState = new PHLightState();
+                    for (PHLight light : lights) {
+                        if(light.getName().equals(String.valueOf(spinnerLight.getSelectedItem()))) {
+                            float xy[] = PHUtilities.calculateXYFromRGB(
+                                    Color.red(mColor), Color.green(mColor), Color.blue(mColor), light.getModelNumber());
+                            lightState.setX(xy[0]);
+                            lightState.setY(xy[1]);
+                            mBroadcastScene.addAlarmAlertScene(light, lightState);
+                            Log.d(TAG, "Alarm alert: add to scene");
                         }
                     }
 

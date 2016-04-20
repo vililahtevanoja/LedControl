@@ -12,10 +12,12 @@ import java.util.Map;
 public class HandleBroadcastScene {
     private Map<PHLight, PHLightState> IncomingCallScene;
     private Map<PHLight, PHLightState> IncomingSMSScene;
+    private Map<PHLight, PHLightState> AlarmAlert;
 
     public HandleBroadcastScene() {
-        this.IncomingCallScene = new HashMap<PHLight, PHLightState>();
+        this.IncomingCallScene = new HashMap<>();
         this.IncomingSMSScene = new HashMap<>();
+        this.AlarmAlert = new HashMap<>();
 
     }
     public void addIncomingCallScene(PHLight light, PHLightState state) {
@@ -26,6 +28,10 @@ public class HandleBroadcastScene {
         IncomingSMSScene.put(light, state);
     }
 
+    public void addAlarmAlertScene(PHLight light, PHLightState state) {
+        AlarmAlert.put(light, state);
+    }
+
     public Map<PHLight, PHLightState> getIncomingCallScene() {
         return IncomingCallScene;
     }
@@ -34,8 +40,11 @@ public class HandleBroadcastScene {
         return IncomingSMSScene;
     }
 
+    public Map<PHLight, PHLightState> getAlarmAlert() { return AlarmAlert;};
+
     public void clearBroadcastScene() {
         IncomingSMSScene.clear();
         IncomingCallScene.clear();
+        AlarmAlert.clear();
     }
 }
