@@ -6,8 +6,11 @@ import java.util.List;
 
 public class CurveTest {
 
+
+
     @Test
     public void testRefined() throws Exception {
+        // need to build proper test data for this
         Curve c = new Curve();
         c.addPoint(new PointF(0.0f, 0.0f));
         c.addPoint(new PointF(1.0f, 1.1f));
@@ -27,5 +30,10 @@ public class CurveTest {
         strBuilder.append("}");
         String res = strBuilder.toString();
         System.out.println(res);
+    }
+
+    @Test
+    public void testGetPointOnCurve() {
+        throw new UnsupportedOperationException();
     }
 }

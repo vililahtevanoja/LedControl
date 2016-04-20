@@ -1,7 +1,9 @@
 package fi.aalto.mobilesystems.ledcontrol.ledcontrol;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Class for representing a curve
@@ -14,6 +16,10 @@ public class Curve {
 
     public Curve(List<PointF> points) {
         this.points = points;
+    }
+
+    public Curve(List<PointF> points, int steps) {
+        this.points = calculateQuadraticBezierCurvePoints(points, steps);
     }
 
     /**
@@ -87,19 +93,128 @@ public class Curve {
         this.points = points;
     }
 
-    public Curve refined(int resolution) {
-        return getQuadraticBezierCurve(resolution);
+    /**
+     * Refines this curve using the quadratic Beziér formula.
+     * @param steps Number of refinement steps. A larger number will result in a smoother curve with
+     *              more points.
+     */
+    public void refine(int steps) {
+        this.points = calculateQuadraticBezierCurvePoints(this.points, steps);
     }
 
-    private Curve getQuadraticBezierCurve(int steps) {
+    /**
+     * Get length of the curve
+     * @return
+     */
+    public double getLength() {
+        if (this.points.size() <= 1)
+            return 0.0;
+        double length = 0.0;
+        PointF next;
+        Iterator<PointF> pointIterator = this.points.iterator();
+        PointF current = pointIterator.next();
+        while (pointIterator.hasNext()) {
+            next = pointIterator.next();
+            length += current.distanceTo(next);
+            current = next;
+        }
+        return length;
+    }
+
+    /**
+     * Get point on curve defined by the given curve ratio.
+     * @param curveRatio Ratio for the point on the line. e.g. 0.5 is halfway, 1/3 is third of the
+     *                   way
+     * @return PointF object of the point dividing the curve according to the given ratio
+     */
+    public PointF getPointOnCurve(double curveRatio) {
+        double curveLength = getLength();
+        if (curveRatio > 1.0) {
+            curveRatio = 1.0;
+        }
+        else if (curveRatio < 0) {
+            curveRatio = 0;
+        }
+        if (curveLength == 0) {
+            return new PointF(0.0f, 0.0f);
+        }
+        else if (curveLength == 1) {
+            return new PointF(this.points.get(0));
+        }
+
+        double wantedPosition = curveRatio / curveLength;
+        double currentPosition = 0.0;
+        Iterator<PointF> pointIterator = this.points.iterator();
+        PointF current = pointIterator.next();
+        PointF next = new PointF();
+        double lengthSoFar = 0.0;
+        while (currentPosition < wantedPosition && pointIterator.hasNext()) {
+            next = pointIterator.next();
+            double distance = current.distanceTo(next);
+            lengthSoFar += distance;
+            if (currentPosition + distance >= wantedPosition) {
+                break;
+            }
+            else {
+                currentPosition += current.distanceTo(next);
+                current = next;
+            }
+        }
+
+        if (currentPosition == wantedPosition) {
+            return new PointF(current);
+        }
+        double distance = current.distanceTo(next);
+        double ratio = (wantedPosition - lengthSoFar) / distance;
+        PointF p = current.pointBetween(next, ratio);
+        return p;
+    }
+
+    /**
+     * Creates a curve refined from this curve with quadratic Beziér curve algorithm.
+     *
+     * @param steps Number of refinement steps. A larger number will result in a smoother curve with
+     *              more points.
+     * @return
+     */
+    public Curve refined(int steps) {
         Curve curve = new Curve();
         int numberOfCurvePoints = this.points.size();
         for (int i = 0; i <= numberOfCurvePoints - 3; i++) {
-            curve.addPoints(calculateQuadratizBezierCurvePoints(steps, points.get(i), points.get(i+1), points.get(i+2)));
+            curve.addPoints(calculateQuadratizBezierCurvePoints(steps, points.get(i),
+                    points.get(i+1), points.get(i+2)));
         }
         return curve;
     }
 
+    /**
+     * Uses the quadratic Beziér curve algorithm to calculate a new curve point set.
+     * @param points Input point set
+     * @param steps Number of steps used in the algorithm. A larger number will result in a smoother
+     *              curve with more points.
+     * @return
+     */
+    private List<PointF> calculateQuadraticBezierCurvePoints(List<PointF> points, int steps) {
+        int numberOfCurvePoints = this.points.size();
+        List<PointF> newPoints = new LinkedList<>();
+        for (int i = 0; i <= numberOfCurvePoints - 3; i++) {
+            points.addAll(calculateQuadratizBezierCurvePoints(steps, points.get(i),
+                    points.get(i+1), points.get(i+2)));
+        }
+        return newPoints;
+    }
+
+    /**
+     * Uses the quadratic Beziér curve algorithm to calculate a new curve point set from three
+     * input points.
+     *
+     * @param steps Number of steps used in the algorithm. A larger number will result in a smoother
+     *              curve with more points.
+     * @param p1
+     * @param p2
+     * @param p3
+     * @return
+     */
     private List<PointF> calculateQuadratizBezierCurvePoints(int steps, PointF p1, PointF p2, PointF p3) {
         LinkedList<PointF> ps = new LinkedList<>();
         for (int j = 0; j <= steps; j++) {
