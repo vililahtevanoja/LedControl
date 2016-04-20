@@ -151,11 +151,11 @@ public class Curve {
         while (currentPosition < wantedPosition && pointIterator.hasNext()) {
             next = pointIterator.next();
             double distance = current.distanceTo(next);
-            lengthSoFar += distance;
             if (currentPosition + distance > wantedPosition) {
                 break;
             }
             else {
+                lengthSoFar += distance;
                 currentPosition += current.distanceTo(next);
                 current = next;
             }
