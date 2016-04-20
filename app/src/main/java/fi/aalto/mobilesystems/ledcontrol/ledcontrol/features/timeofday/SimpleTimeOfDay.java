@@ -1,34 +1,102 @@
 package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
 
+import android.app.Fragment;
+import android.app.IntentService;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLightState;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import fi.aalto.mobilesystems.ledcontrol.LedControl;
+import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Curve;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.SimpleColorTemperatureCurve;
 
-public class SimpleTimeOfDay implements TimeOfDay {
+public class SimpleTimeOfDay extends IntentService implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = "SimpleTimeOfDay";
     private static final int DEFAULT_MORNING = 6;
     private static final int DEFAULT_NIGHT = 22;
     private static final int DEFAULT_TRANSITION = 1;
+    private static final String classPrefkey = "timeofday";
+    private static final String morningHourPrefkey = classPrefkey + ".morningHour";
+    private static final String nightHourPrefKey = classPrefkey + ".nightHour";
+    private static final String transitionPrefKey = classPrefkey + ".transitionHours";
+    private static final String enabledPrefKey = classPrefkey + ".enabled";
     private int morningHour;
     private int nightHour;
     private int transition;
+    private boolean enabled;
     private Curve colourTemperatureCurve;
+    private SharedPreferences sharedPrefs;
+
+    public static class IntentActions {
+        private final static String prefix = "fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday";
+        public final static String Start = prefix + ".START_TIMEOFDAY";
+        public final static String Stop = prefix + ".STOP_TIMEOFDAY";
+        public final static String Update = prefix + ".UPDATE_TIMEOFDAY";
+    }
 
     public SimpleTimeOfDay() {
-        this(DEFAULT_MORNING, DEFAULT_NIGHT, DEFAULT_TRANSITION);
+        super(TAG);
+        this.initialize();
     }
 
-    public SimpleTimeOfDay(int morningHour, int nightHour) {
-        this(morningHour, nightHour, DEFAULT_TRANSITION);
+    public SimpleTimeOfDay(String name) {
+        super(name);
+        this.initialize();
     }
 
-    public SimpleTimeOfDay(int morningHour, int nightHour, int transition) {
+    protected SimpleTimeOfDay(String name, int morningHour, int nightHour, int transition) {
+        super(name);
         this.morningHour = morningHour;
         this.nightHour = nightHour;
         this.transition = transition;
+    }
+
+    protected void initialize() {
+        Context ctx = LedControl.getContext();
+        String preferencesKey = ctx.getString(R.string.shared_preferences_key);
+        this.sharedPrefs = LedControl.getContext().getSharedPreferences(preferencesKey, MODE_PRIVATE);
+        this.updateTimes();
+        if (this.sharedPrefs.getBoolean(enabledPrefKey, false)) {
+            this.enabled = true;
+        }
         this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(5);
+    }
+
+    protected void updateTimes() {
+        Log.i(TAG, "Updating configured times");
+        SharedPreferences.Editor editor = this.sharedPrefs.edit();
+        int morning = this.sharedPrefs.getInt(morningHourPrefkey, -1);
+        int night = this.sharedPrefs.getInt(nightHourPrefKey, -1);
+        int transition = this.sharedPrefs.getInt(transitionPrefKey, -1);
+        if (morning < 0) {
+            editor.putInt(morningHourPrefkey, DEFAULT_MORNING);
+        }
+        if (night < 0) {
+            editor.putInt(nightHourPrefKey, DEFAULT_NIGHT);
+        }
+        if (transition < 0) {
+            editor.putInt(transitionPrefKey, DEFAULT_TRANSITION);
+        }
+        editor.apply();
+        this.morningHour = morning;
+        this.nightHour = night;
+        this.transition = transition;
+        Log.i(TAG, "Morning: " + this.morningHour
+                + ", night: " + this.nightHour
+                + ", transition: " + this.transition);
+
     }
 
     protected double getTransitionValue(int hour, int minute) {
@@ -58,12 +126,53 @@ public class SimpleTimeOfDay implements TimeOfDay {
         return (k*x+y);
     }
 
-    @Override
     public PointF getCurrentColorPoint() {
         GregorianCalendar cal = new GregorianCalendar();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
         double transitionValue = this.getTransitionValue(hour, minute);
         return this.colourTemperatureCurve.getPointOnCurve(transitionValue);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        PHHueSDK sdk = PHHueSDK.getInstance();
+        String action = intent.getAction();
+        Log.i(TAG, "Intent received with action " + action);
+        if (action == null)
+            return;
+        switch (action) {
+            case IntentActions.Stop:
+                this.enabled = false;
+                return;
+            case IntentActions.Start:
+                this.enabled = true;
+                this.updateTimes();
+                break;
+            case IntentActions.Update:
+                if (!this.enabled) {
+                    return;
+                }
+                break;
+        }
+        PHLightState state = new PHLightState();
+        PointF p = getCurrentColorPoint();
+        state.setX(p.x);
+        state.setY(p.y);
+        Log.i(TAG, "Updating light color to " + p.toString());
+        for (PHBridge bridge : sdk.getAllBridges()) {
+            for (PHLight light : bridge.getResourceCache().getAllLights()) {
+                bridge.updateLightState(light, state);
+            }
+        }
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.i(TAG, "Shared preference cache changed");
+        if (key.equals(morningHourPrefkey) || key.equals(nightHourPrefKey) && key.equals(transitionPrefKey)) {
+            updateTimes();
+        }
     }
 }

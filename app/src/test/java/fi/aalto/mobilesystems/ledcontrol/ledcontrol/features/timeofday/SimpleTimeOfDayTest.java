@@ -44,7 +44,7 @@ public class SimpleTimeOfDayTest {
 
         @Test
         public void testGetTransitionValue() {
-            SimpleTimeOfDay mtod = new SimpleTimeOfDay(morningHour, nightHour, transitionHours);
+            SimpleTimeOfDay mtod = new SimpleTimeOfDay("SimpleTimeOfDay", morningHour, nightHour, transitionHours);
             double actual = mtod.getTransitionValue(currentHour, currentMinute);
             assertEquals(expected, actual, 0.01);
         }
