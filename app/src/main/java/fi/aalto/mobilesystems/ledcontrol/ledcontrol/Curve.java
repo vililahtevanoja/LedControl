@@ -142,7 +142,7 @@ public class Curve {
             return new PointF(this.points.get(0));
         }
 
-        double wantedPosition = curveRatio / curveLength;
+        double wantedPosition = curveLength * curveRatio;
         double currentPosition = 0.0;
         Iterator<PointF> pointIterator = this.points.iterator();
         PointF current = pointIterator.next();
@@ -152,7 +152,7 @@ public class Curve {
             next = pointIterator.next();
             double distance = current.distanceTo(next);
             lengthSoFar += distance;
-            if (currentPosition + distance >= wantedPosition) {
+            if (currentPosition + distance > wantedPosition) {
                 break;
             }
             else {

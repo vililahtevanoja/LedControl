@@ -46,8 +46,8 @@ public class Line {
      * @return Calculated point on the line
      */
     public PointF getPointOnLine(double ratio) {
-        float x = (float) ((1 - ratio) * a.x + ratio * b.x);
-        float y = (float) ((1 - ratio) * a.y + ratio * b.y);
+        float x = (float) ((1-ratio) * a.x + ratio * b.x);
+        float y = (float) ((1-ratio) * a.y + ratio * b.y);
         return new PointF(x, y);
     }
 
