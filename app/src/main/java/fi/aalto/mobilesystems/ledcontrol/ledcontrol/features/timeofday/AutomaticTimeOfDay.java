@@ -7,7 +7,7 @@ import com.google.android.gms.location.LocationListener;
 
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 
-public class AutomaticTimeOfDay implements LocationListener, TimeOfDay {
+public class AutomaticTimeOfDay implements LocationListener {
     private static final String TAG = "AutomaticTimeOfDay";
     private Location lastLocation;
     private double currentDayFactor = 0.0f;
@@ -29,7 +29,6 @@ public class AutomaticTimeOfDay implements LocationListener, TimeOfDay {
         }
     }
 
-    @Override
     public PointF getCurrentColorPoint() {
         return new PointF();
     }

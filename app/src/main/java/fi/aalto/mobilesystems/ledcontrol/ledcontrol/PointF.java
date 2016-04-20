@@ -34,4 +34,8 @@ public class PointF extends com.philips.lighting.hue.sdk.utilities.impl.PointF {
         float epsilon = 0.001f;
         return(Math.abs(this.x - p.x) < epsilon && Math.abs(this.y - p.y) < epsilon);
     }
+
+    public String toString() {
+        return "(x: " + this.x + ", y: " + this.y + ")";
+    }
 }

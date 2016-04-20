@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
+        <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay"></service>
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 </manifest>

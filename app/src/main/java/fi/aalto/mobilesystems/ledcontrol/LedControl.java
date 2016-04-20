@@ -22,12 +22,11 @@ public class LedControl extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        BlinkLights blink = new BlinkLights(2);
     }
 
     public static SharedPreferences getSharedPreferences() {
         Context ctx = LedControl.getContext();
-        String sharedPreferencesKey = ctx.getString(R.string.preferences_file_key);
+        String sharedPreferencesKey = ctx.getString(R.string.shared_preferences_key);
         return ctx.getSharedPreferences(sharedPreferencesKey ,Context.MODE_PRIVATE);
     }
 }
