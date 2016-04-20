@@ -21,6 +21,7 @@
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
         <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay"></service>
+        <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.AutomaticTimeOfDay"></service>
     </application>
 
 </manifest>
