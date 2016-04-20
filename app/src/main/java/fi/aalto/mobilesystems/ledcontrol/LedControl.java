@@ -1,8 +1,10 @@
 package fi.aalto.mobilesystems.ledcontrol;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.BlinkLights;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.AutomaticTimeOfDay;
 
 public class LedControl extends Application {
 
@@ -21,5 +23,11 @@ public class LedControl extends Application {
         super.onCreate();
         sApplication = this;
         BlinkLights blink = new BlinkLights(2);
+    }
+
+    public static SharedPreferences getSharedPreferences() {
+        Context ctx = LedControl.getContext();
+        String sharedPreferencesKey = ctx.getString(R.string.preferences_file_key);
+        return ctx.getSharedPreferences(sharedPreferencesKey ,Context.MODE_PRIVATE);
     }
 }
