@@ -23,11 +23,12 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile files('libs/huelocalsdk.jar')
+    compile files('libs/huesdkresources.jar')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
-    compile files('libs/huelocalsdk.jar')
-    compile files('libs/huesdkresources.jar')
+    compile 'com.android.support:support-v4:23.3.0'
 }
 task jdepend(type: JDepend, dependsOn: 'compileDebugSources') {
     classesDir file('build/intermediates/classes/debug/fi/aalto/mobilesystems/ledcontrol/')

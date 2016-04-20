@@ -23,3 +23,5 @@ public class LedControl extends Application {
         BlinkLights blink = new BlinkLights(2);
     }
 }
+
+
