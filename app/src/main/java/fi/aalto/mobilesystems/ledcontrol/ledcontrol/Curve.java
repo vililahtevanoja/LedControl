@@ -197,8 +197,12 @@ public class Curve {
     private List<PointF> calculateQuadraticBezierCurvePoints(List<PointF> points, int steps) {
         int numberOfCurvePoints = this.points.size();
         List<PointF> newPoints = new LinkedList<>();
+        if (points.size() <= 2) {
+            newPoints.addAll(points);
+            return newPoints;
+        }
         for (int i = 0; i <= numberOfCurvePoints - 3; i++) {
-            points.addAll(calculateQuadratizBezierCurvePoints(steps, points.get(i),
+            newPoints.addAll(calculateQuadratizBezierCurvePoints(steps, points.get(i),
                     points.get(i+1), points.get(i+2)));
         }
         return newPoints;
