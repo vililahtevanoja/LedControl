@@ -37,25 +37,31 @@ public class CurveTest {
     @RunWith(Parameterized.class)
     public static class PointOnCurveTest {
         @Parameterized.Parameters
-        public static Iterable<Object[]> data() {
-            return Arrays.asList(new Object[][]{
-                    { 0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f, 0.0, 0.0f, 0.0f},
-                    { 0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f, 0.5, 1.0f, 1.0f},
-                    { 0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f, 1.0, 2.0f, 2.0f}});
+        public static Iterable<Object[][]> data() {
+            return Arrays.asList(new Object[][][]{
+                    { {0.0, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f}},
+                    { {0.5, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f}},
+                    { {1.0, 2.0f, 2.0f}, {0.0f, 0.0f, 1.0f, 1.0f, 2.0f, 2.0f}}});
         }
 
         private Curve curve;
         private double ratio;
         private PointF expected;
 
-        public PointOnCurveTest(float x1, float y1, float x2, float y2, float x3, float y3,
-                                double ratio, float x4, float y4) {
+        public PointOnCurveTest(Object[] input, Object[] points) {
             this.curve = new Curve();
-            curve.addPoint(new PointF(x1, y1));
-            curve.addPoint(new PointF(x2, y2));
-            curve.addPoint(new PointF(x3, y3));
-            this.ratio = ratio;
-            this.expected = new PointF(x4, y4);
+            this.ratio = (double)input[0];
+            this.expected = new PointF((float)input[1], (float)input[2]);
+            float last = 0.0f;
+            int i = 0;
+            for (Object n : points) {
+                if (i % 2 == 0)
+                    last = (float)n;
+                else {
+                    this.curve.addPoint(new PointF(last, (float)n));
+                }
+                i++;
+            }
         }
 
         @Test
