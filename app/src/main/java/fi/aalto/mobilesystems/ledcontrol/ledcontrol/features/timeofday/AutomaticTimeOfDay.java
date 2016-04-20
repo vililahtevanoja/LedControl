@@ -5,6 +5,8 @@ import android.location.Location;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
+
 public class AutomaticTimeOfDay implements LocationListener, TimeOfDay {
     private static final String TAG = "AutomaticTimeOfDay";
     private Location lastLocation;
@@ -28,8 +30,7 @@ public class AutomaticTimeOfDay implements LocationListener, TimeOfDay {
     }
 
     @Override
-    public float[] fetchPHueXYColor() {
-        float[] xy = new float[]{0.0f, 0.0f};
-        return xy;
+    public PointF getCurrentColorPoint() {
+        return new PointF();
     }
 }
