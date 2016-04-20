@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CurveTest {
@@ -84,5 +85,38 @@ public class CurveTest {
             PointF actual = this.curve.getPointOnCurve(ratio);
             assertTrue(actual.equals(expected));
         }
+    }
+
+    @Test
+    public void addLine() {
+        PointF p1 = new PointF(4.5f, 3.2f);
+        PointF p2 = new PointF(4.53f, 4.2f);
+        Curve curve = new Curve();
+        curve.addPoint(new PointF(0.0f, 0.3f));
+        curve.addPoint(new PointF(0.1f, 0.3f));
+        curve.addPoint(new PointF(0.7f, 0.3f));
+        curve.addPoint(new PointF(0.6f, 0.3f));
+        curve.addLine(new Line(p1, p2));
+        List<PointF> points = curve.getPoints();
+        int size = points.size();
+        assertTrue(points.get(size-2).equals(p1));
+        assertTrue(points.get(size-1).equals(p2));
+    }
+
+    @Test
+    public void addLineNoDuplicatePointsKept() {
+        PointF p1 = new PointF(4.5f, 3.2f);
+        PointF p2 = new PointF(4.53f, 4.2f);
+        Curve curve = new Curve();
+        curve.addPoint(new PointF(0.0f, 0.3f));
+        curve.addPoint(new PointF(0.1f, 0.3f));
+        curve.addPoint(new PointF(0.7f, 0.3f));
+        curve.addPoint(new PointF(0.6f, 0.3f));
+        curve.addPoint(new PointF(4.5f, 3.2f));
+        curve.addLine(new Line(p1, p2));
+        List<PointF> points = curve.getPoints();
+        int size = points.size();
+        assertFalse(points.get(size-3).equals(p1) && points.get(size-2).equals(p1));
+        assertTrue(points.get(size-1).equals(p2));
     }
 }

@@ -32,7 +32,7 @@ public class Curve {
         PointF a = line.getA();
         PointF b = line.getB();
         if(!lastAdded.equals(a)) {
-            this.points.add(line.getA());
+            this.points.add(a);
         }
         this.points.add(b);
     }
