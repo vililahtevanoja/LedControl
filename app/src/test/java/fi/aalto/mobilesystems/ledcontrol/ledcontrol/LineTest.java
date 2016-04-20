@@ -90,4 +90,15 @@ public class LineTest {
             assertEquals(this.expected, actual, 0.001);
         }
     }
+
+    @Test
+    public void testCopyConstructor() {
+        PointF p1 = new PointF(0.0f, 0.45f);
+        PointF p2 = new PointF(0.4f, 0.32f);
+        Line line1 = new Line(p1, p2);
+        Line line2 = new Line(line1);
+        assertTrue(line1.getA().equals(p1));
+        assertTrue(line2.getB().equals(p2));
+
+    }
 }

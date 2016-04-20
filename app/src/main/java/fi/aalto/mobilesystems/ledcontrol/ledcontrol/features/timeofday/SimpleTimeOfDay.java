@@ -1,8 +1,14 @@
 package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
 
+import android.content.SharedPreferences;
+import android.util.Pair;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
+import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Curve;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.SimpleColorTemperatureCurve;
@@ -11,24 +17,49 @@ public class SimpleTimeOfDay implements TimeOfDay {
     private static final int DEFAULT_MORNING = 6;
     private static final int DEFAULT_NIGHT = 22;
     private static final int DEFAULT_TRANSITION = 1;
+    private static final int CURVE_REFINE_STEPS = 5;
     private int morningHour;
     private int nightHour;
     private int transition;
     private Curve colourTemperatureCurve;
+    private SharedPreferences sharedPrefs;
 
     public SimpleTimeOfDay() {
-        this(DEFAULT_MORNING, DEFAULT_NIGHT, DEFAULT_TRANSITION);
+        this.sharedPrefs = LedControl.getSharedPreferences();
+        List<Pair<String, Integer>> toAdd = new LinkedList<>();
+        if (!this.sharedPrefs.contains("time_of_day.morninghour")) {
+            toAdd.add(new Pair<>("time_of_day.morninghour", DEFAULT_MORNING));
+        }
+        if (!this.sharedPrefs.contains("time_of_day.nighthour")) {
+            toAdd.add(new Pair<>("time_of_day.nighthour", DEFAULT_NIGHT));
+        }
+        if (!this.sharedPrefs.contains("time_of_day.transitionhours")) {
+            toAdd.add(new Pair<>("time_of_day.transitionhours", DEFAULT_TRANSITION));
+        }
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        for (Pair<String, Integer> kv : toAdd) {
+            sharedPrefsEditor.putInt(kv.first, kv.second);
+        }
+        sharedPrefsEditor.apply();
+        this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(CURVE_REFINE_STEPS);
     }
 
     public SimpleTimeOfDay(int morningHour, int nightHour) {
-        this(morningHour, nightHour, DEFAULT_TRANSITION);
+        this.sharedPrefs = LedControl.getSharedPreferences();
+        SharedPreferences.Editor sharedPrefsEditor = this.sharedPrefs.edit();
+        sharedPrefsEditor.putInt("time_of_day.morninghour", DEFAULT_MORNING);
+        sharedPrefsEditor.putInt("time_of_day.nighthour", DEFAULT_NIGHT);
+        sharedPrefsEditor.putInt("time_of_day.transitionhours", DEFAULT_TRANSITION);
+        sharedPrefsEditor.apply();
+        this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(CURVE_REFINE_STEPS);
+
     }
 
     public SimpleTimeOfDay(int morningHour, int nightHour, int transition) {
         this.morningHour = morningHour;
         this.nightHour = nightHour;
         this.transition = transition;
-        this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(5);
+        this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(CURVE_REFINE_STEPS);
     }
 
     protected double getTransitionValue(int hour, int minute) {
