@@ -3,10 +3,15 @@ import android.app.Application;
 import android.content.Context;
 
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.BlinkLights;
+import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
 
 public class LedControl extends Application {
 
     private static Application sApplication;
+
+    private static HandleBroadcastScene mBroadcastScene;
+
+    public static HandleBroadcastScene getBroadcastScene() {return mBroadcastScene;}
 
     public static Application getApplication() {
         return sApplication;
@@ -20,6 +25,7 @@ public class LedControl extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        BlinkLights blink = new BlinkLights(2);
+        //BlinkLights blink = new BlinkLights(2);
+        mBroadcastScene = new HandleBroadcastScene();
     }
 }

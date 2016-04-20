@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LedControl</string>
+    <string name="light_prompt">Choose a light</string>
+
+    <string-array name="source_arrays">
+        <item>Incoming Phone Call</item>
+        <item>Incoming SMS</item>
+    </string-array>
+
 </resources>

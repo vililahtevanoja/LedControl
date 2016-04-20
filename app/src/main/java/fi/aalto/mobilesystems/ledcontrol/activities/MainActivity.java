@@ -32,5 +32,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        final Button handleBroadcastButton = (Button) findViewById(R.id.handleBroadcastButton);
+        handleBroadcastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(), HandleBroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
