@@ -40,10 +40,10 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private SharedPreferences sharedPrefs;
 
     public static class IntentActions {
-        private final static String prefix = "fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday";
-        public final static String Start = prefix + ".START_TIMEOFDAY";
-        public final static String Stop = prefix + ".STOP_TIMEOFDAY";
-        public final static String Update = prefix + ".UPDATE_TIMEOFDAY";
+        private final static String prefix = SimpleTimeOfDay.class.getName();
+        public final static String Start = prefix + ".START";
+        public final static String Stop = prefix + ".STOP";
+        public final static String Update = prefix + ".UPDATE";
     }
 
     public SimpleTimeOfDay() {
@@ -141,19 +141,17 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
         Log.i(TAG, "Intent received with action " + action);
         if (action == null)
             return;
-        switch (action) {
-            case IntentActions.Stop:
-                this.enabled = false;
+        if (action.equals(IntentActions.Stop)) {
+            this.enabled = false;
+        }
+        else if (action.equals(IntentActions.Start)) {
+            this.enabled = true;
+            updateTimes();
+        }
+        else if (action.equals(IntentActions.Update)) {
+            if (!this.enabled) {
                 return;
-            case IntentActions.Start:
-                this.enabled = true;
-                this.updateTimes();
-                break;
-            case IntentActions.Update:
-                if (!this.enabled) {
-                    return;
-                }
-                break;
+            }
         }
         PHLightState state = new PHLightState();
         PointF p = getCurrentColorPoint();

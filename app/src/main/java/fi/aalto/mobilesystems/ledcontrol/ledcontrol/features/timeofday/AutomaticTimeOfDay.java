@@ -49,9 +49,10 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     private Calendar sunrise;
     private Calendar sunset;
     private Curve colorTemperatureCurve;
-    private double transitionHours = 2.0;
-    private boolean gotLocation = false;
-    private boolean canGetLocation = false;
+    private double transitionHours;
+    private boolean canGetLocation;
+    private boolean enabled;
+    private boolean halted;
 
     public AutomaticTimeOfDay() {
         super(TAG);
@@ -64,6 +65,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
         this.sunset = new GregorianCalendar();
         this.sunset.set(Calendar.HOUR_OF_DAY, 18);
         this.sunset.set(Calendar.MINUTE, 0);
+        this.transitionHours = 2.0;
         this.colorTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(TEMPERATURE_CURVE_REFINE_STEPS);
     }
 
@@ -72,10 +74,12 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
      */
     public static final class IntentActions {
         private static final String prefix = AutomaticTimeOfDay.class.getName();
-        public static final String Start = prefix + "START_AUTOMATIC_TIME_OF_DAY";
-        public static final String UpdateData = prefix + "UPDATE_DATA";
-        public static final String UpdateLighting = prefix + "UPDATE_LIGHTING";
-        public static final String Stop = prefix + "STOP_AUTOMATIC_TIME_OF_DAY";
+        public static final String Start = prefix + ".START";
+        public static final String UpdateData = prefix + ".UPDATE_DATA";
+        public static final String UpdateLighting = prefix + ".UPDATE_LIGHTING";
+        public static final String Stop = prefix + ".STOP";
+        public static final String Halt = prefix + ".HALT";
+        public static final String Resume = prefix + ".RESUME";
     }
     /**
      * Gets current location.
@@ -85,8 +89,6 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
      * @return Updated or current this.lastLocation.
      */
     public Location getLocation() {
-        double latitude;
-        double longitude;
         Location location = null;
         try {
             LocationManager locationManager = (LocationManager) LedControl.getContext()
@@ -96,10 +98,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                 this.canGetLocation = false;
                 return this.lastLocation;
             }
-
-
             location = lastLocation;
-
             // getting GPS status
             boolean isGPSEnabled = locationManager
                     .isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -158,10 +157,10 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
      */
     public void updateSunriseSundown() {
         this.lastLocation = getLocation();
+        Log.i(TAG, "Setting up sunrise/sundown time update query");
         RequestQueue queue = Volley.newRequestQueue(LedControl.getContext());
-        String url = String.format("http://api.sunrise-sunset.org/json"
+        String url = String.format(Locale.US, "http://api.sunrise-sunset.org/json"
                 + "?lat=%.7f&lng=%.7f&formatted=0",
-                Locale.US,
                 lastLocation.getLatitude(), lastLocation.getLongitude());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url,
@@ -176,6 +175,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                             String sunsetStr = results.getString("sunset");
                             sunrise = stringToCalendar(sunriseStr);
                             sunset = stringToCalendar(sunsetStr);
+                            Log.i(TAG, "Sunrise/sunset data updated");
                         } catch (JSONException e) {
                             Log.e(TAG, "Error while handling sunrise/sunset query results", e);
                         }
@@ -187,6 +187,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                 Log.e(TAG, "Error on response to sunrise get: " + error.getMessage());
             }
         });
+        Log.i(TAG, "Sunrise/sunset time update query sent to queue");
         queue.add(stringRequest);
     }
 
@@ -309,18 +310,37 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
 
     /**
      * Implements IntentService. Is used to receive commands for the feature.s
-     * @param intent
+     * @param intent Intent for this service
      */
     @Override
     protected void onHandleIntent(Intent intent) {
         String intentAction = intent.getAction();
         Log.i(TAG, "Intent received with action " + intentAction);
-        if (intent.getAction().equals(IntentActions.UpdateData)) {
-            Log.i(TAG, "Updating sunrise/sundown data");
+        if (intent.getAction().equals(IntentActions.Start)) {
+            this.enabled = true;
+            this.halted = false;
             updateSunriseSundown();
+            updateLighting();
+        }
+        else if (intent.getAction().equals(IntentActions.Stop)) {
+            this.enabled = false;
+        }
+        else if (intent.getAction().equals(IntentActions.Halt)) {
+            this.halted = true;
+        }
+        else if (intent.getAction().equals(IntentActions.Resume)) {
+            this.halted = false;
+        }
+        else if (intent.getAction().equals(IntentActions.UpdateData)) {
+            if (this.enabled) {
+                Log.i(TAG, "Updating sunrise/sundown data");
+                updateSunriseSundown();
+            }
         }
         else if (intent.getAction().equals(IntentActions.UpdateLighting)) {
-            updateLighting();
+            if (this.enabled && !this.halted) {
+                updateLighting();
+            }
         }
     }
 }
