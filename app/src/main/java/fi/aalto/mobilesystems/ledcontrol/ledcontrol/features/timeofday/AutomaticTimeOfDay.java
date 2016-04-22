@@ -13,26 +13,43 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.LocationListener;
+import com.philips.lighting.hue.sdk.PHHueSDK;
+import com.philips.lighting.model.PHBridge;
+import com.philips.lighting.model.PHLight;
+import com.philips.lighting.model.PHLightState;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Curve;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.SimpleColorTemperatureCurve;
 
+/**
+ * Implements automatic time-of-day feature.
+ *
+ * The class uses location providers to get device location and uses a public API to get the
+ * sunrise/sunset-times which it uses to direct the Hue light states.
+ */
 public class AutomaticTimeOfDay extends IntentService implements LocationListener {
     private static final String TAG = "AutomaticTimeOfDay";
     private static final float REFRESH_DISTANCE = 50000.0f;
     private static final long REFRESH_TIME_INTERVAL = 6 * (60 * 60 * 1000); // 6h
+    private static final int TEMPERATURE_CURVE_REFINE_STEPS = 5;
     private Location lastLocation;
-    private GregorianCalendar sunrise;
-    private GregorianCalendar sunset;
-    private double currentDayFactor = 0.0f;
-    private int transition = 2;
+    private Calendar sunrise;
+    private Calendar sunset;
+    private Curve colorTemperatureCurve;
+    private double transitionHours = 2.0;
     private boolean gotLocation = false;
     private boolean canGetLocation = false;
 
@@ -47,30 +64,41 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
         this.sunset = new GregorianCalendar();
         this.sunset.set(Calendar.HOUR_OF_DAY, 18);
         this.sunset.set(Calendar.MINUTE, 0);
+        this.colorTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(TEMPERATURE_CURVE_REFINE_STEPS);
     }
 
+    /**
+     * Contains Intent action string for this service
+     */
     public static final class IntentActions {
-        public static final String Start = "START_AUTOMATIC_TIME_OF_DAY";
-        public static final String Update = "UPDATE_AUTOMATIC_TIME_OF_DAY";
-        public static final String Stop = "STOP_AUTOMATIC_TIME_OF_DAY";
+        private static final String prefix = AutomaticTimeOfDay.class.getName();
+        public static final String Start = prefix + "START_AUTOMATIC_TIME_OF_DAY";
+        public static final String UpdateData = prefix + "UPDATE_DATA";
+        public static final String UpdateLighting = prefix + "UPDATE_LIGHTING";
+        public static final String Stop = prefix + "STOP_AUTOMATIC_TIME_OF_DAY";
     }
-
-    public void updateDayFactor() {
-        if (this.lastLocation == null) {
-            return;
-        }
-        double sunriseRatio = timeToDayRatio(this.sunrise);
-        double sunsetRatio = timeToDayRatio(this.sunset);
-        this.currentDayFactor = 0.0f;
-    }
-
+    /**
+     * Gets current location.
+     *
+     * The method tries both network and GPS location providers and if neither of those works the
+     * location is left unchanged.
+     * @return Updated or current this.lastLocation.
+     */
     public Location getLocation() {
-        Location location = lastLocation;
         double latitude;
         double longitude;
+        Location location = null;
         try {
             LocationManager locationManager = (LocationManager) LedControl.getContext()
                     .getSystemService(LOCATION_SERVICE);
+
+            if (locationManager == null) {
+                this.canGetLocation = false;
+                return this.lastLocation;
+            }
+
+
+            location = lastLocation;
 
             // getting GPS status
             boolean isGPSEnabled = locationManager
@@ -81,7 +109,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
+                this.canGetLocation = false;
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -91,12 +119,9 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                                 REFRESH_TIME_INTERVAL,
                                 REFRESH_DISTANCE,(android.location.LocationListener) this);
                         Log.d("Network", "Network Enabled");
-                        if (locationManager != null) {
-                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null && this.lastLocation.distanceTo(location) > REFRESH_DISTANCE) {
+                            this.lastLocation = location;
                         }
                     } catch (SecurityException ex) {
                         Log.e(TAG, "Error while requesting location", ex);
@@ -110,12 +135,9 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                                     REFRESH_TIME_INTERVAL,
                                     REFRESH_TIME_INTERVAL, (android.location.LocationListener) this);
                             Log.d("GPS", "GPS Enabled");
-                            if (locationManager != null) {
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    latitude = location.getLatitude();
-                                    longitude = location.getLongitude();
-                                }
+                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (location != null && this.lastLocation.distanceTo(location) > REFRESH_DISTANCE) {
+                                this.lastLocation = location;
                             }
                         } catch (SecurityException ex) {
                             Log.e(TAG, "Error while requesting locations", ex);
@@ -131,13 +153,16 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
         return location;
     }
 
+    /**
+     * Updates sunrise/sundown data by querying a public API at api.sunrise-sunset.org
+     */
     public void updateSunriseSundown() {
         this.lastLocation = getLocation();
         RequestQueue queue = Volley.newRequestQueue(LedControl.getContext());
-        String url = "http://api.sunrise-sunset.org/json"
-                + "?lat="+ String.format("%.7f",lastLocation.getLatitude())
-                + "&lng=" + String.format("%.7f", lastLocation.getLongitude())
-                + "&formatted=0";
+        String url = String.format("http://api.sunrise-sunset.org/json"
+                + "?lat=%.7f&lng=%.7f&formatted=0",
+                Locale.US,
+                lastLocation.getLatitude(), lastLocation.getLongitude());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url,
                 new Response.Listener<JSONObject>() {
@@ -149,12 +174,10 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
                             results = response.getJSONObject("results");
                             String sunriseStr = results.getString("sunrise");
                             String sunsetStr = results.getString("sunset");
-                            sunrise = stringToGregorianCalendarTime(sunriseStr);
-                            updateDayFactor();
-                            sunset = stringToGregorianCalendarTime(sunsetStr);
+                            sunrise = stringToCalendar(sunriseStr);
+                            sunset = stringToCalendar(sunsetStr);
                         } catch (JSONException e) {
                             Log.e(TAG, "Error while handling sunrise/sunset query results", e);
-                            return;
                         }
 
                     }
@@ -168,28 +191,41 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     }
 
     /**
+     * Converts datetime string to a Calendar-object
      *
-     * @param str Of form: "2015-05-21T05:05:35+00:00"
-     * @return Gregorian Calenar representing the HH:MM values of the string
+     * @param dateStr Of form: "2015-05-21T05:05:35+00:00"
+     * @return Calendar-object representing the HH:MM values of the string
      */
-    protected GregorianCalendar stringToGregorianCalendarTime(String str) {
-        GregorianCalendar cal = new GregorianCalendar();
-        String timeStr = str.split("T")[1];
-        String hourStr = timeStr.split(":")[1];
-        String minuteStr = timeStr.split(":")[1].substring(0, 2);
-        int hour = Integer.parseInt(hourStr);
-        int minute = Integer.parseInt(minuteStr);
-        TimeZone currentTz = cal.getTimeZone();
-        int currentTzOffsetHours = currentTz.getRawOffset() / 1000 / 60 / 60;
-        cal.set(Calendar.HOUR_OF_DAY, hour + currentTzOffsetHours);
-        cal.set(Calendar.MINUTE, minute);
+    protected Calendar stringToCalendar(String dateStr) {
+        String dateFormatString = "yyyy-MM-dd'T'HH:mm:ssZZZZZ";
+        DateFormat format = new SimpleDateFormat(dateFormatString);
+        Date date;
+        try {
+            date = format.parse(dateStr);
+        } catch (ParseException ex) {
+            Log.e(TAG, "Error while parsing " + dateStr
+                    + " against format string " + dateFormatString);
+            return null;
+        }
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
         return cal;
     }
 
-    protected double timeToDayRatio(GregorianCalendar cal) {
-        return cal.get(Calendar.HOUR_OF_DAY) + (cal.get(Calendar.MINUTE) / 60.0) / 24.0;
+    /**
+     * Calculates given time to ratio of day
+     * e.g. 12:00 -> 0.5, 18:00 -> 0.75
+     * @param cal Current time as a Calendar object
+     * @return
+     */
+    protected double timeToDayRatio(Calendar cal) {
+        return (cal.get(Calendar.HOUR_OF_DAY) + (cal.get(Calendar.MINUTE) / 60.0)) / 24.0;
     }
 
+    /**
+     * Implements LocationListener. Is called when the current device location has changed
+     * @param location New location
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
@@ -200,12 +236,91 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
         }
     }
 
-    public PointF getCurrentColorPoint() {
-        return new PointF();
+    /**
+     * Converts given time to hours.
+     * e.g. 17:15 -> 17.25, 12:20 -> 12.33333
+     * @param cal
+     * @return
+     */
+    protected double timeToHours(Calendar cal) {
+        return (cal.get(Calendar.HOUR_OF_DAY) + (cal.get(Calendar.MINUTE) / 60.0));
     }
 
+    public double getTransitionValue(double currentDayRatio) {
+        double x;
+        double y;
+        double k;
+
+        double sunriseDayRatio = timeToDayRatio(this.sunrise);
+        double sunsetDayRatio = timeToDayRatio(this.sunset);
+        double transitionDayRatio = this.transitionHours / 24;
+
+        if (currentDayRatio > sunriseDayRatio
+                && currentDayRatio < sunsetDayRatio - transitionDayRatio) {
+            return 1.0;
+        }
+        else if (currentDayRatio < sunriseDayRatio - transitionDayRatio || currentDayRatio > sunriseDayRatio) {
+            return 0.0;
+        }
+        else if (currentDayRatio >= sunriseDayRatio - transitionDayRatio
+                && currentDayRatio < sunsetDayRatio - transitionDayRatio) {
+            double transitionStart = sunriseDayRatio - transitionDayRatio;
+            x = currentDayRatio - transitionStart;
+            k = 1.0 / transitionDayRatio;
+            y = 0.0;
+        }
+        else {
+            double transitionStart = sunsetDayRatio - transitionDayRatio;
+            x = currentDayRatio - transitionStart;
+            k = -(1.0 / transitionDayRatio);
+            y = 1.0;
+        }
+        return (k*y*x);
+    }
+
+    /**
+     * Calculates current color point in the Hue XY-colorspace
+     * @return
+     */
+    public PointF getCurrentColorPoint() {
+        GregorianCalendar cal = new GregorianCalendar();
+        double currentDayRatio = timeToDayRatio(cal);
+        double transitionValue = this.getTransitionValue(currentDayRatio);
+        return this.colorTemperatureCurve.getPointOnCurve(transitionValue);
+    }
+
+    /**
+     * Updates Hue light states according to the time of day, last known location and sunrise/sunset
+     * data for that location.
+     */
+    protected void updateLighting() {
+        PHHueSDK sdk = PHHueSDK.getInstance();
+        PHLightState state = new PHLightState();
+        PointF p = this.getCurrentColorPoint();
+        state.setX(p.x);
+        state.setY(p.y);
+        Log.i(TAG, "Updating light color to " + p.toString());
+        for (PHBridge bridge : sdk.getAllBridges()) {
+            for (PHLight light : bridge.getResourceCache().getAllLights()) {
+                bridge.updateLightState(light, state);
+            }
+        }
+    }
+
+    /**
+     * Implements IntentService. Is used to receive commands for the feature.s
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
-        updateSunriseSundown();
+        String intentAction = intent.getAction();
+        Log.i(TAG, "Intent received with action " + intentAction);
+        if (intent.getAction().equals(IntentActions.UpdateData)) {
+            Log.i(TAG, "Updating sunrise/sundown data");
+            updateSunriseSundown();
+        }
+        else if (intent.getAction().equals(IntentActions.UpdateLighting)) {
+            updateLighting();
+        }
     }
 }
