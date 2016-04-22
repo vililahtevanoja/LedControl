@@ -24,9 +24,9 @@ import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueController;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueProperties;
 
-public class LedControlService  extends IntentService implements PHSDKListener {
-    private final static String TAG = "LedControlService";
-    private String serviceName = "LedControlService";
+public class LedControlScheduler extends IntentService implements PHSDKListener {
+    private final static String TAG = "LedControlScheduler";
+    private String serviceName = "LedControlScheduler";
     private PHHueSDK sdk;
 
     /**
@@ -34,7 +34,7 @@ public class LedControlService  extends IntentService implements PHSDKListener {
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-    public LedControlService(String name) {
+    public LedControlScheduler(String name) {
         super(name);
         serviceName = name;
     }
