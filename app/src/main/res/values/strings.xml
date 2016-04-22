@@ -2,4 +2,18 @@
     <string name="app_name">LedControl</string>
     <string name="sound_pitch">Sound Hertz</string>
     <string name="shared_preferences_key">fi.aalto.mobilesystems.ledcontrol.shared_preferences</string>
+
+    <!-- SimpleTimeOfDay intent actions -->
+    <string name="simpletimeofday.action.start">fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.START</string>
+    <string name="simpletimeofday.action.stop">fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.STOP</string>
+    <string name="simpletimeofday.action.update">fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.UPDATE</string>
+
+    <!-- AutomaticTimeOfDay intent actions -->
+    <string name="automatictimeofday.action.start">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.START</string>
+    <string name="automatictimeofday.action.stop">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.START</string>
+    <string name="automatictimeofday.action.update_lighting">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.UPDATE_LIGHTING</string>
+    <string name="automatictimeofday.action.update_data">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.UPDATE_DATA</string>
+    <string name="automatictimeofday.action.halt">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.HALT</string>
+    <string name="automatictimeofday.action.resume">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.RESUME</string>
+
 </resources>

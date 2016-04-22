@@ -39,10 +39,9 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private SharedPreferences sharedPrefs;
 
     public static class IntentActions {
-        private final static String prefix = SimpleTimeOfDay.class.getName();
-        public final static String Start = prefix + ".START";
-        public final static String Stop = prefix + ".STOP";
-        public final static String Update = prefix + ".UPDATE";
+        public final static String Start = LedControl.getStringResource(R.string.simpletimeofday_action_start);
+        public final static String Stop = LedControl.getStringResource(R.string.simpletimeofday_action_stop);
+        public final static String Update = LedControl.getStringResource(R.string.simpletimeofday_action_update);
     }
 
     public SimpleTimeOfDay() {

@@ -29,6 +29,10 @@ public class LedControl extends Application {
         String sharedPreferencesKey = ctx.getString(R.string.shared_preferences_key);
         return ctx.getSharedPreferences(sharedPreferencesKey ,Context.MODE_PRIVATE);
     }
+
+    public static String getStringResource(int resId) {
+        return LedControl.getContext().getString(resId);
+    }
 }
 
 

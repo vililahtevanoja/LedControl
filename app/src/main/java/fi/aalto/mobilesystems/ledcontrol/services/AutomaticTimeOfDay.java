@@ -30,6 +30,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
+import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Curve;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.SimpleColorTemperatureCurve;
@@ -73,13 +74,12 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
      * Contains Intent action string for this service
      */
     public static final class IntentActions {
-        private static final String prefix = AutomaticTimeOfDay.class.getName();
-        public static final String Start = prefix + ".START";
-        public static final String UpdateData = prefix + ".UPDATE_DATA";
-        public static final String UpdateLighting = prefix + ".UPDATE_LIGHTING";
-        public static final String Stop = prefix + ".STOP";
-        public static final String Halt = prefix + ".HALT";
-        public static final String Resume = prefix + ".RESUME";
+        public static final String Start = LedControl.getStringResource(R.string.automatictimeofday_action_start);
+        public static final String UpdateData = LedControl.getStringResource(R.string.automatictimeofday_action_update_data);
+        public static final String UpdateLighting = LedControl.getStringResource(R.string.automatictimeofday_action_update_lighting);
+        public static final String Stop = LedControl.getStringResource(R.string.automatictimeofday_action_stop);
+        public static final String Halt = LedControl.getStringResource(R.string.automatictimeofday_action_halt);
+        public static final String Resume = LedControl.getStringResource(R.string.automatictimeofday_action_resume);
     }
     /**
      * Gets current location.
