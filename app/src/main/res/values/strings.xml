@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">LedControl</string>
+    <string name="sound_pitch">Sound Hertz</string>
     <string name="shared_preferences_key">fi.aalto.mobilesystems.ledcontrol.shared_preferences</string>
 </resources>

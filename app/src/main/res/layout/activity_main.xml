@@ -16,4 +16,23 @@
         android:id="@+id/setColorsButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sound_pitch"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="171dp"
+        android:layout_toEndOf="@+id/setColorsButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Hertz"
+        android:id="@+id/hertz"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_toEndOf="@+id/textView1"
+        android:layout_marginStart="36dp" />
 </RelativeLayout>

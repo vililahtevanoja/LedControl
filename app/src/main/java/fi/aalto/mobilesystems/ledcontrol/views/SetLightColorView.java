@@ -1,13 +1,11 @@
 package fi.aalto.mobilesystems.ledcontrol.views;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 
-import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 
 import fi.aalto.mobilesystems.ledcontrol.R;
@@ -31,4 +29,6 @@ public class SetLightColorView extends View {
         this.greenSeekBar.setProgress(g);
         this.blueSeekBar.setProgress(b);
     }
+
+
 }

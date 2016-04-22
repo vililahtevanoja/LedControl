@@ -1,5 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
 
+import android.content.SharedPreferences;
+import android.util.Pair;
 import android.app.Fragment;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -15,6 +17,8 @@ import com.philips.lighting.model.PHLightState;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
@@ -27,6 +31,7 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private static final int DEFAULT_MORNING = 6;
     private static final int DEFAULT_NIGHT = 22;
     private static final int DEFAULT_TRANSITION = 1;
+    private static final int CURVE_REFINE_STEPS = 5;
     private static final String classPrefkey = "timeofday";
     private static final String morningHourPrefkey = classPrefkey + ".morningHour";
     private static final String nightHourPrefKey = classPrefkey + ".nightHour";
@@ -61,6 +66,7 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
         this.morningHour = morningHour;
         this.nightHour = nightHour;
         this.transition = transition;
+        this.colourTemperatureCurve = SimpleColorTemperatureCurve.getRefinedCurve(CURVE_REFINE_STEPS);
     }
 
     protected void initialize() {
