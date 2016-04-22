@@ -30,6 +30,10 @@ public class PointF extends com.philips.lighting.hue.sdk.utilities.impl.PointF {
         return line.getPointOnLine(ratio);
     }
 
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
     public boolean equals(PointF p) {
         float epsilon = 0.001f;
         return(Math.abs(this.x - p.x) < epsilon && Math.abs(this.y - p.y) < epsilon);
