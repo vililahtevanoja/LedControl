@@ -4,9 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.content.SharedPreferences;
 
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.BlinkLights;
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.AutomaticTimeOfDay;
-
 public class LedControl extends Application {
     private static final String TAG = "LedControl";
 

@@ -1,4 +1,4 @@
-package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
+package fi.aalto.mobilesystems.ledcontrol.services;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
+
+import fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay;
 
 public class SimpleTimeOfDayTest {
 

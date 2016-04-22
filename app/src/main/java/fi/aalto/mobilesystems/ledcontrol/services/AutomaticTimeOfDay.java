@@ -1,4 +1,4 @@
-package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
+package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.app.IntentService;
 import android.content.Intent;

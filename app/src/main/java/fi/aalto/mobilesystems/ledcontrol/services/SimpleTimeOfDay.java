@@ -1,13 +1,9 @@
-package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
+package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.content.SharedPreferences;
-import android.util.Pair;
-import android.app.Fragment;
 import android.app.IntentService;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -17,8 +13,6 @@ import com.philips.lighting.model.PHLightState;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
