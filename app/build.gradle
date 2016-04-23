@@ -36,6 +36,7 @@ dependencies {
     compile 'me.priyesh:chroma:1.0.2'
     compile files('libs/huelocalsdk.jar')
     compile files('libs/huesdkresources.jar')
+    compile 'com.github.LarsWerkman:Lobsterpicker:1.0.1'
 }
 task jdepend(type: JDepend, dependsOn: 'compileDebugSources') {
     classesDir file('build/intermediates/classes/debug/fi/aalto/mobilesystems/ledcontrol/')

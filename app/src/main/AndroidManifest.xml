@@ -22,7 +22,14 @@
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
         <activity android:name=".activities.HandleBroadcastActivity"></activity>
+        <activity android:name=".activities.Broadcast"></activity>
+        <activity android:name=".activities.phoneColorActivity"></activity>
+        <activity android:name=".activities.musicColorActivity"></activity>
+        <activity android:name=".activities.mailColorActivity"></activity>
+        <activity android:name=".activities.alarmColorActivity"></activity>
         <activity android:name=".activities.SetAlarmActivity"></activity>
+
+
 
         <receiver android:name=".models.MyBroadcastReceiver">
 

@@ -43,6 +43,7 @@ public class HandleBroadcastActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_broadcast);
+
         this.sdk = PHHueSDK.getInstance();
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();

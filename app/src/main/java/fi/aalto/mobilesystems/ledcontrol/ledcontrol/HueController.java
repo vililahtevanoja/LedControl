@@ -33,7 +33,7 @@ public class HueController {
 
     public void connectToEmulatorAccessPoint() {
         PHAccessPoint ap = new PHAccessPoint();
-        ap.setIpAddress("130.233.84.56:8000");   // Philips Hue Emulator address
+        ap.setIpAddress("130.233.85.37:8000");   // Philips Hue Emulator address
         ap.setUsername("newdeveloper");
         this.sdk.connect(ap);
     }
