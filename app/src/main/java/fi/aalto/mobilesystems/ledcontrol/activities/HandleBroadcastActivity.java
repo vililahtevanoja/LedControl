@@ -69,7 +69,7 @@ public class HandleBroadcastActivity extends AppCompatActivity {
         addListenerOnButton();
 
         Alarm alarm = new Alarm();
-        alarm.SetAlarm(this);
+        alarm.SetAlarm(this, null);
 
 
     }

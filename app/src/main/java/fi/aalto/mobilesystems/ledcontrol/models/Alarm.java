@@ -17,18 +17,20 @@ public class Alarm {
 
     private static String TAG = "Alarm";
 
-    public void SetAlarm(Context context)
+    public void SetAlarm(Context context, Calendar calendar)
     {
+        if(calendar == null){
+            // Set the alarm to start at approximately 2:00 p.m.
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, 20);
+            calendar.set(Calendar.MINUTE, 50);
+        }
+
         AlarmManager alarmMgr =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, ChangeLightService.class);
         intent.setAction("Alarm");
         PendingIntent alarmIntent = PendingIntent.getService(context, 0, intent, 0);
 
-        // Set the alarm to start at approximately 2:00 p.m.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 50);
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
