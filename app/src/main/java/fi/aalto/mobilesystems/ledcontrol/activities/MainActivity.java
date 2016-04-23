@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mail.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(LedControl.getContext(), mailColorActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         phone.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(LedControl.getContext(),phoneColorActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         music.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(LedControl.getContext(), musicColorActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(),SetAlarmActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
     }

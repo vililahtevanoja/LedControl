@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 
@@ -31,6 +32,7 @@ public class phoneColorActivity extends AppCompatActivity {
 
     private static final String TAG = "Phone Activity";
     private ImageButton submitButton;
+    private Button cancel;
     private static CheckBox light1;
     private static CheckBox light2;
     private static CheckBox light3;
@@ -80,8 +82,15 @@ public class phoneColorActivity extends AppCompatActivity {
     */
 
     public void addListenerOnButton(){
-
+        cancel = (Button) findViewById(R.id.cancel);
         submitButton = (ImageButton) findViewById(R.id.OK);
+
+        cancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener(){
 
@@ -133,8 +142,10 @@ public class phoneColorActivity extends AppCompatActivity {
                             });
                     alertDialog.show();
                 }
+
             }
         });
     }
+
 
 }
