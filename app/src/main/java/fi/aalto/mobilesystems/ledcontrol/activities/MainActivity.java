@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 //        if (savedInstanceState == null) {
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         }));
         new Thread(dispatcher,"Audio Dispatcher").start();
 
+=======
+>>>>>>> 9a6683c7c3c81494693edbb541f2ec07e1cef376
     }
 
     /**

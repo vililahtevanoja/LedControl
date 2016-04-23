@@ -1,13 +1,9 @@
-package fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday;
+package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.content.SharedPreferences;
-import android.util.Pair;
-import android.app.Fragment;
 import android.app.IntentService;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -17,8 +13,6 @@ import com.philips.lighting.model.PHLightState;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
@@ -45,10 +39,9 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private SharedPreferences sharedPrefs;
 
     public static class IntentActions {
-        private final static String prefix = "fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday";
-        public final static String Start = prefix + ".START_TIMEOFDAY";
-        public final static String Stop = prefix + ".STOP_TIMEOFDAY";
-        public final static String Update = prefix + ".UPDATE_TIMEOFDAY";
+        public final static String Start = LedControl.getStringResource(R.string.simpletimeofday_action_start);
+        public final static String Stop = LedControl.getStringResource(R.string.simpletimeofday_action_stop);
+        public final static String Update = LedControl.getStringResource(R.string.simpletimeofday_action_update);
     }
 
     public SimpleTimeOfDay() {
@@ -147,19 +140,17 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
         Log.i(TAG, "Intent received with action " + action);
         if (action == null)
             return;
-        switch (action) {
-            case IntentActions.Stop:
-                this.enabled = false;
+        if (action.equals(IntentActions.Stop)) {
+            this.enabled = false;
+        }
+        else if (action.equals(IntentActions.Start)) {
+            this.enabled = true;
+            updateTimes();
+        }
+        else if (action.equals(IntentActions.Update)) {
+            if (!this.enabled) {
                 return;
-            case IntentActions.Start:
-                this.enabled = true;
-                this.updateTimes();
-                break;
-            case IntentActions.Update:
-                if (!this.enabled) {
-                    return;
-                }
-                break;
+            }
         }
         PHLightState state = new PHLightState();
         PointF p = getCurrentColorPoint();

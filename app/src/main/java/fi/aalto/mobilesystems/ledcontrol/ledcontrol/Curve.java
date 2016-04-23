@@ -9,6 +9,7 @@ import java.util.ListIterator;
  * Class for representing a curve
  */
 public class Curve {
+    private final static double POSITION_COMPARISON_DELTA = 0.00001;
     private List<PointF> points;
     public Curve() {
         this.points = new LinkedList<>();
@@ -161,7 +162,8 @@ public class Curve {
             }
         }
 
-        if (currentPosition == wantedPosition) {
+        if (Math.abs(currentPosition - wantedPosition) < POSITION_COMPARISON_DELTA
+                || Math.abs(wantedPosition - currentPosition) < POSITION_COMPARISON_DELTA) {
             return new PointF(current);
         }
         double distance = current.distanceTo(next);

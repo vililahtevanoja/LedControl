@@ -6,8 +6,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay;
-
 import static org.junit.Assert.*;
 
 public class PointFTest {
