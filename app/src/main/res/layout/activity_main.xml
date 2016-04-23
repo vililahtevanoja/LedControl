@@ -25,4 +25,5 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/setColorsButton"
          />
+
 </RelativeLayout>
