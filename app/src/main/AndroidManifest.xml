@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
         <activity android:name=".activities.HandleBroadcastActivity"></activity>
+        <activity android:name=".activities.SetAlarmActivity"></activity>
 
         <service android:name=".services.ChangeLightService" />
 

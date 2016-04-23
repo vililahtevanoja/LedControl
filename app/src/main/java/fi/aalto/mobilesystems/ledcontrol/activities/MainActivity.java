@@ -41,5 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        final Button setAlarmButton = (Button) findViewById(R.id.setAlarmButton);
+        setAlarmButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(),SetAlarmActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
