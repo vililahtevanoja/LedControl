@@ -17,7 +17,7 @@ public class AutoStart extends BroadcastReceiver
     {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
         {
-            alarm.SetAlarm(context, null);
+            alarm.SetAlarm(context, null, null, 0);
             Log.d(TAG,"Auto start");
         }
     }

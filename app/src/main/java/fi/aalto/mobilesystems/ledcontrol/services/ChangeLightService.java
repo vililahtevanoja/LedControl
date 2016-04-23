@@ -70,6 +70,7 @@ public class ChangeLightService extends IntentService {
                 break;
 
             case "Alarm":
+                updateLight(intent.getStringExtra("lightIdentifier"), intent.getIntExtra("color",0));
                 Log.d(TAG, "Alarm Intent Detected.");
                 break;
 
@@ -97,5 +98,12 @@ public class ChangeLightService extends IntentService {
             // it.remove(); // avoids a ConcurrentModificationException
             Log.d(TAG, "updateLightState with Scene");
         }
+    }
+
+    private void updateLight(String lightIdentifier, int color){
+
+        mPHLight = mLightsMap.get(lightIdentifier);
+        bridge.updateLightState(mPHLight,getPHLightStateWithRGB(mPHLight, color));
+        Log.d(TAG, "updateLight with color");
     }
 }

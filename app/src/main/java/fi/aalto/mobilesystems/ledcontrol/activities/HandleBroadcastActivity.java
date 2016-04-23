@@ -68,10 +68,6 @@ public class HandleBroadcastActivity extends AppCompatActivity {
         addItemsOnSpinnerSource();
         addListenerOnButton();
 
-        Alarm alarm = new Alarm();
-        alarm.SetAlarm(this, null);
-
-
     }
 
     @Override

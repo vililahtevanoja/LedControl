@@ -17,7 +17,7 @@ public class Alarm {
 
     private static String TAG = "Alarm";
 
-    public void SetAlarm(Context context, Calendar calendar)
+    public void SetAlarm(Context context, Calendar calendar, String lightIdentifier, int color)
     {
         if(calendar == null){
             // Set the alarm to start at approximately 2:00 p.m.
@@ -26,8 +26,14 @@ public class Alarm {
             calendar.set(Calendar.MINUTE, 50);
         }
 
+        if(lightIdentifier == null){
+            return;
+        }
+
         AlarmManager alarmMgr =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, ChangeLightService.class);
+        intent.putExtra("lightIdentifier", lightIdentifier);
+        intent.putExtra("color", color);
         intent.setAction("Alarm");
         PendingIntent alarmIntent = PendingIntent.getService(context, 0, intent, 0);
 

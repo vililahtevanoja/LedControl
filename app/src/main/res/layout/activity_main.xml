@@ -7,32 +7,61 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity"
+                android:background="#dddbdb">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set colors"
-        android:id="@+id/setColorsButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Handle Broadcast"
-        android:id="@+id/handleBroadcastButton"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/setColorsButton"
-         />
+        android:id="@+id/linearLayout1"
+        >
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handle Broadcast"
+            android:id="@+id/smsButton"
+            android:src="@drawable/sms_button"
+            android:padding="10dip"
+            android:layout_weight="1"/>
 
-    <Button
-        android:layout_width="wrap_content"
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handle Broadcast"
+            android:id="@+id/handleBroadcastButton"
+            android:src="@drawable/phone_button"
+            android:padding="10dip"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Alarm alert"
-        android:id="@+id/setAlarmButton"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/handleBroadcastButton"
-        />
+        android:layout_below="@+id/linearLayout1">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/alarm_button"
+            android:id="@+id/setAlarmButton"
+            android:padding="10dip"
+            android:layout_weight="1"/>
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Handle Broadcast"
+            android:id="@+id/discoButton"
+            android:src="@drawable/disco_button"
+            android:padding="10dip"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>
