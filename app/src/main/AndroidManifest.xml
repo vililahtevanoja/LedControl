@@ -3,7 +3,12 @@
     package="fi.aalto.mobilesystems.ledcontrol">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+=======
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+>>>>>>> Shudaa
 
     <application
         android:name=".LedControl"
@@ -20,7 +25,29 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
+<<<<<<< HEAD
         <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay"></service>
+=======
+        <activity android:name=".activities.HandleBroadcastActivity"></activity>
+        <activity android:name=".activities.Broadcast"></activity>
+        <activity android:name=".activities.phoneColorActivity"></activity>
+        <activity android:name=".activities.musicColorActivity"></activity>
+        <activity android:name=".activities.mailColorActivity"></activity>
+        <activity android:name=".activities.alarmColorActivity"></activity>
+        <activity android:name=".activities.SetAlarmActivity"></activity>
+
+
+
+        <receiver android:name=".models.MyBroadcastReceiver">
+
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="com.android.deskclock.ALARM_ALERT"/>
+            </intent-filter>
+
+        </receiver>
+>>>>>>> Shudaa
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 </manifest>

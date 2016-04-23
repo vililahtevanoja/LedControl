@@ -8,7 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+<<<<<<< HEAD
 import android.widget.TextView;
+=======
+import android.widget.ImageButton;
+>>>>>>> Shudaa
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -34,7 +38,12 @@ public class MainActivity extends AppCompatActivity {
         this.handler.startBridgeSearch();
         this.handler.connectToEmulatorAccessPoint();
 
+<<<<<<< HEAD
       final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
+=======
+        /*
+        final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
+>>>>>>> Shudaa
         setLightColoursButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
 //        if (savedInstanceState == null) {
 //            getSupportFragmentManager().beginTransaction()
 //                    .add(R.id.container, new PlaceholderFragment()).commit();
@@ -84,5 +94,57 @@ public class MainActivity extends AppCompatActivity {
                     container, false);
             return rootView;
         }
+=======
+        final Button handleBroadcastButton = (Button) findViewById(R.id.handleBroadcastButton);
+        handleBroadcastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(), HandleBroadcastActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        final Button featureButton = (Button) findViewById(R.id.featureButton);
+        featureButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                Intent intent = new Intent(LedControl.getContext(),Broadcast.class);
+                startActivity(intent);
+            }
+        });
+        */
+
+        final ImageButton mail = (ImageButton) findViewById(R.id.mail);
+        mail.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(LedControl.getContext(), mailColorActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+        final ImageButton phone = (ImageButton) findViewById(R.id.phone);
+        phone.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(LedControl.getContext(),phoneColorActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+        final ImageButton music = (ImageButton) findViewById(R.id.music);
+        music.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(LedControl.getContext(), musicColorActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+        final ImageButton setAlarmButton = (ImageButton) findViewById(R.id.alarm);
+        setAlarmButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(),SetAlarmActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
+>>>>>>> Shudaa
     }
 }
