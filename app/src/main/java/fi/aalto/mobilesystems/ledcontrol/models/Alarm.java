@@ -21,9 +21,10 @@ public class Alarm {
     {
         if(calendar == null){
             // Set the alarm to start at approximately 2:00 p.m.
-            calendar.setTimeInMillis(System.currentTimeMillis());
+            return;
+           /* calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR_OF_DAY, 20);
-            calendar.set(Calendar.MINUTE, 50);
+            calendar.set(Calendar.MINUTE, 50);*/
         }
 
         if(lightIdentifier == null){

@@ -34,14 +34,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-        final ImageButton handleBroadcastButton = (ImageButton) findViewById(R.id.handleBroadcastButton);
-        handleBroadcastButton.setOnClickListener(new View.OnClickListener() {
+        final ImageButton setPhoneButton = (ImageButton) findViewById(R.id.phoneButton);
+        setPhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LedControl.getContext(), HandleBroadcastActivity.class);
+                Intent intent = new Intent(LedControl.getContext(), SelectLightColorActivity.class);
+                intent.setAction(SelectLightColorActivity.Actions.PhoneCall);
                 startActivity(intent);
             }
         });
+
+        final ImageButton setSMSButton = (ImageButton) findViewById(R.id.smsButton);
+        setSMSButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(),SelectLightColorActivity.class);
+                intent.setAction(SelectLightColorActivity.Actions.SMS);
+                startActivity(intent);
+            }
+        });
+
         final ImageButton setAlarmButton = (ImageButton) findViewById(R.id.setAlarmButton);
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -49,5 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 }

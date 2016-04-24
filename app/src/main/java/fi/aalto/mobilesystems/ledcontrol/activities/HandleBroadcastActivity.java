@@ -22,7 +22,6 @@ import java.util.List;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
-import fi.aalto.mobilesystems.ledcontrol.models.Alarm;
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
 import me.priyesh.chroma.ChromaDialog;
 import me.priyesh.chroma.ColorMode;
