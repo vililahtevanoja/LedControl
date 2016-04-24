@@ -31,6 +31,7 @@ public class SetAlarmActivity extends AppCompatActivity {
 
 
     }
+
     public void setTime(View view){
         mHour = mTimePicker.getCurrentHour();
         mMin = mTimePicker.getCurrentMinute();
