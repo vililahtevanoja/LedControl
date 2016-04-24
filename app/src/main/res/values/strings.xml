@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">LedControl</string>
     <string name="light_prompt">Choose a light</string>
+    <string name="preference_file_key">store light data</string>
 
     <string-array name="source_arrays">
         <item>Incoming Phone Call</item>

@@ -213,7 +213,9 @@ public class SelectLightColorActivity extends AppCompatActivity {
     }
 
     protected void initialize() {
-        msharedPrefs = getPreferences(MODE_PRIVATE);
+       // msharedPrefs = getPreferences(MODE_PRIVATE);
+        msharedPrefs = this.getSharedPreferences(getString(R.string.preference_file_key), this.MODE_PRIVATE);
+
         Gson gson = new Gson();
         String json = msharedPrefs.getString("HandleBroadcastScene","");
         if(json.equals("")){

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
+import fi.aalto.mobilesystems.ledcontrol.R;
 
 /**
  * Created by ZSY on 4/21/16.
@@ -25,7 +26,8 @@ public class AutoStart extends BroadcastReceiver
     {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
         {
-            msharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            msharedPrefs = context.getSharedPreferences(
+                    context.getString(R.string.preference_file_key), context.MODE_PRIVATE);
             Gson gson = new Gson();
             String json = msharedPrefs.getString("HandleBroadcastScene","");
             if(json.equals("")){
