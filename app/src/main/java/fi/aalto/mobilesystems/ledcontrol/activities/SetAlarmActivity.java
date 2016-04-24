@@ -1,6 +1,8 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,21 @@ public class SetAlarmActivity extends AppCompatActivity {
     }
 
     public void setTime(View view){
+
+        if(lightIdentifier == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Please select at least one light")
+                    .setTitle("Oops");
+            AlertDialog dialog = builder.create();
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            dialog.show();
+            return;
+        }
         mHour = mTimePicker.getCurrentHour();
         mMin = mTimePicker.getCurrentMinute();
 
@@ -52,6 +69,14 @@ public class SetAlarmActivity extends AppCompatActivity {
 
         Alarm alarm = new Alarm();
         alarm.SetAlarm(this, mCalendar, lightIdentifier, mColor);
+
+        Toast.makeText(SetAlarmActivity.this,
+                "OnClickListener : " +
+                        "\nlightIdentifier: " + lightIdentifier +
+                        "\ncolor: " + mColor +
+                        "\nHour:" + mHour +
+                        "\nMin:" + mMin,
+                Toast.LENGTH_SHORT).show();
 
         Log.d(TAG,"mHour:" + mHour + " mMin:" + mMin);
     }
