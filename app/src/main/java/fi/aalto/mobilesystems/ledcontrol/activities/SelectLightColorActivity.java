@@ -1,5 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,6 +49,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
     public static class Actions {
         public final static String PhoneCall = "Incoming Phone Call";
         public final static String SMS = "Incoming SMS";
+        public final static String Alarm = "Alarm clock";
     }
 
     @Override
@@ -103,6 +106,17 @@ public class SelectLightColorActivity extends AppCompatActivity {
                         mBroadcastScene.addIncomingSMSScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
                         Log.d(TAG, "Incoming SMS: add to scene");
+                        break;
+
+                    case Actions.Alarm:
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("lightIdentifier",
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()));
+                        returnIntent.putExtra("color", mColor);
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        mBroadcastScene.addAlarmAlertScene(
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
+                        Log.d(TAG, "Alarm clock: add to scene");
                         break;
                 }
 
@@ -165,6 +179,14 @@ public class SelectLightColorActivity extends AppCompatActivity {
                 if(mBroadcastScene.getIncomingSMSScene().
                         containsKey(mNameIdentifierMap.get(lightName)))
                     HistoryColor = mBroadcastScene.getIncomingSMSScene().
+                            get(mNameIdentifierMap.get(lightName));
+                else
+                    HistoryColor = Color.WHITE;
+                break;
+            case Actions.Alarm:
+                if(mBroadcastScene.getAlarmAlert().
+                        containsKey(mNameIdentifierMap.get(lightName)))
+                    HistoryColor = mBroadcastScene.getAlarmAlert().
                             get(mNameIdentifierMap.get(lightName));
                 else
                     HistoryColor = Color.WHITE;

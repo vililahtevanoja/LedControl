@@ -42,7 +42,8 @@ public class Alarm {
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
-        Log.d(TAG,"set alarm calendar:" + calendar.toString());
+        Log.d(TAG, "set alarm calendar:" + calendar.toString());
+        Log.d(TAG,"set alarm light:" + lightIdentifier + " color:" + color);
     }
 
     public void CancelAlarm(Context context)

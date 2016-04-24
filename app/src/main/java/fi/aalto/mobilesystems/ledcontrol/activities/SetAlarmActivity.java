@@ -1,13 +1,18 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
+import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.models.Alarm;
 
@@ -19,6 +24,9 @@ public class SetAlarmActivity extends AppCompatActivity {
     private TimePicker mTimePicker;
     private int mHour;
     private int mMin;
+    private int mColor;
+    private Button mSelectBulbButton;
+    private String lightIdentifier;
     private Calendar mCalendar;
 
     @Override
@@ -27,7 +35,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.alarm_alert);
 
         mTimePicker=(TimePicker)findViewById(R.id.alarmTime);
-
+        mSelectBulbButton = (Button) findViewById(R.id.light_button);
 
 
     }
@@ -43,9 +51,35 @@ public class SetAlarmActivity extends AppCompatActivity {
         mCalendar.set(Calendar.MINUTE, mMin);
 
         Alarm alarm = new Alarm();
-        alarm.SetAlarm(this, mCalendar, null, 0);
+        alarm.SetAlarm(this, mCalendar, lightIdentifier, mColor);
 
         Log.d(TAG,"mHour:" + mHour + " mMin:" + mMin);
     }
+
+    public void selectLight(View view) {
+        Intent intent = new Intent(LedControl.getContext(),SelectLightColorActivity.class);
+        intent.setAction(SelectLightColorActivity.Actions.Alarm);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                lightIdentifier = data.getStringExtra("lightIdentifier");
+                mColor = data.getIntExtra("color", 0);
+
+                Toast.makeText(SetAlarmActivity.this,
+                        "OnClickListener : " +
+                                "\nlightIdentifier: " + lightIdentifier +
+                                "\ncolor: " + mColor,
+                        Toast.LENGTH_SHORT).show();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
 
 }
