@@ -3,16 +3,15 @@ package fi.aalto.mobilesystems.ledcontrol.activities;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.larswerkman.lobsterpicker.LobsterPicker;
-import com.larswerkman.lobsterpicker.OnColorListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHLight;
@@ -20,6 +19,13 @@ import com.philips.lighting.model.PHLightState;
 
 import java.util.List;
 
+import be.tarsos.dsp.AudioDispatcher;
+import be.tarsos.dsp.AudioEvent;
+import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.io.android.AudioDispatcherFactory;
+import be.tarsos.dsp.pitch.PitchDetectionHandler;
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchProcessor;
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
@@ -134,6 +140,27 @@ public class musicColorActivity extends AppCompatActivity {
                             });
                     alertDialog.show();
                 }
+
+                AudioDispatcher dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
+
+                PitchDetectionHandler pdh = new PitchDetectionHandler() {
+                    @Override
+                    public void handlePitch(PitchDetectionResult result,AudioEvent e) {
+                        final float pitchInHz = result.getPitch();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TextView text = (TextView) findViewById(R.id.textView1);
+                                text.setText("" + pitchInHz);
+                            }
+                        });
+                    }
+                };
+                AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
+                dispatcher.addAudioProcessor(p);
+                new Thread(dispatcher,"Audio Dispatcher").start();
+
+
             }
         });
     }

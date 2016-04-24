@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">LedControl</string>
-<<<<<<< HEAD
     <string name="sound_pitch">Sound Hertz</string>
     <string name="shared_preferences_key">fi.aalto.mobilesystems.ledcontrol.shared_preferences</string>
-<<<<<<< HEAD
-=======
     <string name="light_prompt">Choose a light</string>
 
     <string-array name="source_arrays">
@@ -12,9 +9,6 @@
         <item>Incoming SMS</item>
         <item>Alarm alert</item>
     </string-array>
-
->>>>>>> Shudaa
-=======
 
     <!-- SimpleTimeOfDay intent actions -->
     <string name="simpletimeofday.action.start">fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.START</string>
@@ -29,5 +23,4 @@
     <string name="automatictimeofday.action.halt">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.HALT</string>
     <string name="automatictimeofday.action.resume">fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.RESUME</string>
 
->>>>>>> 9a6683c7c3c81494693edbb541f2ec07e1cef376
 </resources>

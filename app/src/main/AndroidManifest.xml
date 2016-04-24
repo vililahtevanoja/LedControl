@@ -3,16 +3,10 @@
     package="fi.aalto.mobilesystems.ledcontrol">
 
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-<<<<<<< HEAD
-=======
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
->>>>>>> Shudaa
-=======
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
->>>>>>> 9a6683c7c3c81494693edbb541f2ec07e1cef376
 
     <application
         android:name=".LedControl"
@@ -29,10 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SetLightColorsActivity"></activity>
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay"></service>
-=======
         <activity android:name=".activities.HandleBroadcastActivity"></activity>
         <activity android:name=".activities.Broadcast"></activity>
         <activity android:name=".activities.phoneColorActivity"></activity>
@@ -52,8 +44,6 @@
             </intent-filter>
 
         </receiver>
->>>>>>> Shudaa
-=======
         <service android:name=".services.SimpleTimeOfDay">
             <intent-filter>
                 <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.START"/>
@@ -71,7 +61,6 @@
                 <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_LIGHTING"/>
             </intent-filter>
         </service>
->>>>>>> 9a6683c7c3c81494693edbb541f2ec07e1cef376
     </application>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 </manifest>
