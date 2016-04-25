@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.philips.lighting.model.PHLightState;
 
 import java.util.Calendar;
@@ -49,7 +50,7 @@ public class Alarm {
         Log.d(TAG,"set alarm light:" + lightIdentifier + " color:" + color);
     }
 
-    public void setDelayAlarm(Context context, int second, String lightIdentifier, String lightState)
+    public void setRestoreAlarm(Context context, int second, String lightIdentifier, PHLightState lightState)
     {
         AlarmManager alarmMgr;
         PendingIntent alarmIntent;
@@ -57,15 +58,19 @@ public class Alarm {
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, ChangeLightService.class);
         intent.putExtra("lightIdentifier", lightIdentifier);
-        intent.putExtra("lightState", lightState);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(lightState);
+        intent.putExtra("lightState", json);
+
         intent.setAction("RestoreAlarm");
         alarmIntent = PendingIntent.getService(context, 0, intent, 0);
 
         alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() +
                         second, alarmIntent);
-        Log.d(TAG, "set alarm delay:" + second);
-        Log.d(TAG, "set alarm light:" + lightIdentifier + " lightState:" + lightState);
+        Log.d(TAG, "set RestoreAlarm delay:" + second);
+        Log.d(TAG, "set RestoreAlarm light:" + lightIdentifier + " lightState:" + json);
     }
 
     public void CancelAlarm(Context context)

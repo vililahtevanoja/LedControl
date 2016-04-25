@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.Switch;
 
+import com.google.gson.Gson;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHBridge;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
+import fi.aalto.mobilesystems.ledcontrol.models.Alarm;
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
 
 /**
@@ -75,6 +77,9 @@ public class ChangeLightService extends IntentService {
                 break;
 
             case "RestoreAlarm":
+                updateLightWithState(intent.getStringExtra("lightIdentifier"),
+                        intent.getStringExtra("lightState"));
+                Log.d(TAG, "RestoreAlarm Intent Detected.");
                 break;
 
         }
@@ -99,6 +104,8 @@ public class ChangeLightService extends IntentService {
             mColor = (int)pair.getValue();
             bridge.updateLightState(mPHLight,getPHLightStateWithRGB(mPHLight, mColor));
             // it.remove(); // avoids a ConcurrentModificationException
+            setRestore((String)pair.getKey(), mPHLight.getLastKnownLightState());
+
             Log.d(TAG, "updateLightState with Scene");
         }
     }
@@ -110,8 +117,36 @@ public class ChangeLightService extends IntentService {
         Log.d(TAG, "updateLight with color");
     }
 
-    private void updateLightWithState(String lightIdentifier, String lightState){
-        mPHLight = mLightsMap.get(lightIdentifier);
-        Log.d(TAG, "updateLight with lightState");
+    private void updateLightWithState(String lightIdentifier, String lightState)
+    {
+
+        Gson gson = new Gson();
+        if(lightState.equals(""))
+        {
+            Log.d(TAG,"lightState getJson: "+ lightState);
+        } else {
+
+            PHLightState state = gson.fromJson(lightState, PHLightState.class);
+            Log.d(TAG, "lightState getJson: " + lightState);
+
+            mPHLight = mLightsMap.get(lightIdentifier);
+
+            PHLightState lightState1 = new PHLightState();
+
+            lightState1.setX(state.getX());
+            lightState1.setY(state.getY());
+
+            bridge.updateLightState(mPHLight, lightState1);
+
+            Log.d(TAG, "updateLight with lightState");
+        }
+
     }
+
+    private void setRestore(String lightIdentifier, PHLightState state)
+    {
+        Alarm alarm = new Alarm();
+        alarm.setRestoreAlarm(this, 5, lightIdentifier, state);
+    }
+
 }
