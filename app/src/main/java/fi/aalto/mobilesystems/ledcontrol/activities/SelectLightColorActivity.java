@@ -36,6 +36,7 @@ import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
 public class SelectLightColorActivity extends AppCompatActivity {
     private static final String TAG = "LightColorActivity";
     private ImageButton mButtonConfirm;
+    private ImageButton mButtonCancel;
     private Spinner mSpinner;
     private LobsterPicker mLobsterPicker;
     private int mColor;
@@ -59,6 +60,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
 
 
         mButtonConfirm = (ImageButton) findViewById(R.id.confirmButton);
+        mButtonCancel = (ImageButton) findViewById(R.id.cancelButton);
         mLobsterPicker = (LobsterPicker) findViewById(R.id.lobsterpicker);
         mSpinner = (Spinner) findViewById(R.id.spinnerLight);
         initialize();
@@ -95,7 +97,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                switch(getIntent().getAction()) {
+                switch (getIntent().getAction()) {
                     case Actions.PhoneCall:
                         mBroadcastScene.addIncomingCallScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
@@ -117,10 +119,43 @@ public class SelectLightColorActivity extends AppCompatActivity {
                         mBroadcastScene.addAlarmAlertScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
                         Log.d(TAG, "Alarm clock: add to scene");
+                        finish();
                         break;
                 }
+                mLobsterPicker.setHistory(mColor);
+                //  finish();
+            }
+        });
 
-                finish();
+        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (getIntent().getAction()) {
+                    case Actions.PhoneCall:
+                        mBroadcastScene.removeIncomingCallScene(
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()));
+                        Log.d(TAG, "Incoming Phone call: remove light");
+                        break;
+
+                    case Actions.SMS:
+                        mBroadcastScene.removeIncomingSMSScene(
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()));
+                        Log.d(TAG, "Incoming SMS: remove light");
+                        break;
+
+                    case Actions.Alarm:
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("lightIdentifier",
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()));
+                        returnIntent.putExtra("color", mColor);
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        mBroadcastScene.removeAlarmAltertScene(
+                                mNameIdentifierMap.get(mSpinner.getSelectedItem()));
+                        Log.d(TAG, "Alarm clock: remove light");
+                        finish();
+                        break;
+                }
+                mLobsterPicker.setHistory(Color.WHITE);
             }
         });
     }

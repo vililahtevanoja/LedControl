@@ -102,6 +102,14 @@
             android:layout_weight="1"
             android:layout_alignParentEnd="true"/>
 
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/cancelButton"
+            android:src="@drawable/cancel_button"
+            android:layout_weight="1"
+            android:layout_alignParentEnd="true"/>
+
     </LinearLayout>
 
 </RelativeLayout>

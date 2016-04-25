@@ -25,12 +25,24 @@ public class HandleBroadcastScene {
         IncomingCallScene.put(lightIdentifier, color);
     }
 
+    public void removeIncomingCallScene(String lightIdentifier) {
+        IncomingCallScene.remove(lightIdentifier);
+    }
+
     public void addIncomingSMSScene(String lightIdentifier, int color) {
         IncomingSMSScene.put(lightIdentifier, color);
     }
 
+    public void removeIncomingSMSScene(String lightIdentifier) {
+        IncomingSMSScene.remove(lightIdentifier);
+    }
+
     public void addAlarmAlertScene(String lightIdentifier, int color) {
         AlarmAlert.put(lightIdentifier, color);
+    }
+
+    public void removeAlarmAltertScene(String lightIdentifier) {
+        AlarmAlert.remove(lightIdentifier);
     }
 
     public Map<String, Integer> getIncomingCallScene() {
