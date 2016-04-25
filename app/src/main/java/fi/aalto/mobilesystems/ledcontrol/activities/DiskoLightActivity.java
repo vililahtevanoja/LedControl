@@ -79,7 +79,7 @@ public class DiskoLightActivity extends AppCompatActivity {
             @Override
             public void handlePitch(PitchDetectionResult result,AudioEvent e) {
                 final float pitchInHz = result.getPitch();
-                       TextView text = (TextView) findViewById(R.id.textView1);
+                       TextView text = (TextView) findViewById(R.id.soundHertz);
                         text.setText("" + pitchInHz);
 
             }
