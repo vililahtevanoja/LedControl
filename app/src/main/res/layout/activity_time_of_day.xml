@@ -22,29 +22,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/morningHour"
-            android:text="Wake up at" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Wake up at"
+            android:id="@+id/wakeUpAtTextView" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/nightHour"
-            android:text="Go to sleep at" />
+            android:id="@+id/morningHour" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Go to sleep at"
+            android:id="@+id/goToSleepAtTextView" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/transitionHours"
-            android:text="Transition time" />
+            android:id="@+id/nightHour" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Transition time (hours)"
+            android:id="@+id/transitionTimeHoursTextView" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/transitionHours" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/save" />
     </LinearLayout>
 
 </LinearLayout>
