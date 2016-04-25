@@ -66,8 +66,10 @@ public class SelectLightColorActivity extends AppCompatActivity {
         initialize();
 
         this.sdk = PHHueSDK.getInstance();
-        if(this.sdk.getSelectedBridge() == null){
-            Log.e(TAG, "Bridge is null");
+
+        if(this.sdk.getSelectedBridge() == null)
+        {
+            Log.d(TAG, "No bridge found");
             return;
         }
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
