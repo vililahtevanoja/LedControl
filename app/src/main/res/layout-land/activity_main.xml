@@ -10,10 +10,11 @@
     tools:context=".activities.MainActivity"
                 android:background="#dddbdb">
 
+
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/linearLayout1"
         >
         <ImageButton
@@ -37,11 +38,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/linearLayout2"
-        android:layout_below="@+id/linearLayout1">
+        android:layout_toRightOf="@+id/linearLayout1">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -51,14 +52,6 @@
             android:padding="10dip"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sound_pitch"
-            android:layout_marginTop="84dp"
-            android:layout_below="@+id/alarm"
-            android:layout_toStartOf="@+id/music" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -72,11 +65,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/linearLayout3"
-        android:layout_below="@+id/linearLayout2">
+        android:layout_toRightOf="@+id/linearLayout2">
 
         <ImageButton
             android:layout_width="wrap_content"

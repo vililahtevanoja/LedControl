@@ -18,6 +18,7 @@ public class LedControl extends Application {
     private static LedControlScheduler mScheduler;
 
     public static HandleBroadcastScene getBroadcastScene() {return mBroadcastScene;}
+    public static void setBroadcastScene(HandleBroadcastScene scene){mBroadcastScene = scene;}
 
     public static Application getApplication() {
         return sApplication;
@@ -31,6 +32,7 @@ public class LedControl extends Application {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "Created");
+        mBroadcastScene = new HandleBroadcastScene();
         sApplication = this;
         mScheduler = new LedControlScheduler();
     }

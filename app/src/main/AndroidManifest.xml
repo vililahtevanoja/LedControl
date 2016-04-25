@@ -6,8 +6,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
         android:name=".LedControl"
@@ -26,13 +30,11 @@
         <activity android:name=".activities.DiskoLightActivity" />
 
         <activity android:name=".activities.HandleBroadcastActivity" />
-        <activity android:name=".activities.Broadcast" />
-        <activity android:name=".activities.phoneColorActivity" />
-        <activity android:name=".activities.musicColorActivity" />
-        <activity android:name=".activities.mailColorActivity" />
-        <activity android:name=".activities.alarmColorActivity" />
         <activity android:name=".activities.SetAlarmActivity" />
         <activity android:name=".activities.TimeOfDayActivity"/>
+        <activity android:name=".activities.SelectLightColorActivity"></activity>
+
+        <service android:name=".services.ChangeLightService" />
 
         <receiver android:name=".models.MyBroadcastReceiver">
             <intent-filter>
@@ -62,6 +64,14 @@
         <service android:name="fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler"></service>
 
         <activity android:name=".activities.RandomLightActivity"></activity>
+
+
+        <receiver android:name=".models.AutoStart">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

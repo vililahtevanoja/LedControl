@@ -25,64 +25,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         HueProperties.loadProperties();
 
-        final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
+       /* final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
         setLightColoursButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), RandomLightActivity.class);
                 startActivity(intent);
             }
-        });
-
-//        final Button handleBroadcastButton = (Button) findViewById(R.id.handleBroadcastButton);
-//        handleBroadcastButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LedControl.getContext(), HandleBroadcastActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//
-//        final Button featureButton = (Button) findViewById(R.id.featureButton);
-//        featureButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LedControl.getContext(), Broadcast.class);
-//                startActivity(intent);
-//            }
-//        });
+        });*/
 
 
-        final ImageButton mail = (ImageButton) findViewById(R.id.mail);
-        mail.setOnClickListener(new View.OnClickListener() {
+        final ImageButton setPhoneButton = (ImageButton) findViewById(R.id.phoneButton);
+        setPhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LedControl.getContext(), mailColorActivity.class);
+                Intent intent = new Intent(LedControl.getContext(), SelectLightColorActivity.class);
+                intent.setAction(SelectLightColorActivity.Actions.PhoneCall);
                 startActivity(intent);
                 //startActivityForResult(intent, 1);
             }
         });
 
-        final ImageButton phone = (ImageButton) findViewById(R.id.phone);
-        phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LedControl.getContext(), phoneColorActivity.class);
-                startActivity(intent);
-                //startActivityForResult(intent, 1);
-            }
-        });
 
-        final ImageButton music = (ImageButton) findViewById(R.id.music);
-        music.setOnClickListener(new View.OnClickListener() {
-            @Override
+
+        final ImageButton setSMSButton = (ImageButton) findViewById(R.id.smsButton);
+        setSMSButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(LedControl.getContext(), musicColorActivity.class);
+                Intent intent = new Intent(LedControl.getContext(),SelectLightColorActivity.class);
+                intent.setAction(SelectLightColorActivity.Actions.SMS);
                 startActivity(intent);
             }
         });
 
-        final ImageButton setAlarmButton = (ImageButton) findViewById(R.id.alarm);
+        final ImageButton setAlarmButton = (ImageButton) findViewById(R.id.setAlarmButton);
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final ImageButton timeOfDayButton = (ImageButton) findViewById(R.id.timeofday);
+        final ImageButton timeOfDayButton = (ImageButton) findViewById(R.id.setSunButton);
         timeOfDayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
