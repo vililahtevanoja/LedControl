@@ -29,6 +29,11 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
     private String serviceName = "LedControlScheduler";
     private PHHueSDK sdk;
 
+    public LedControlScheduler() {
+        super(TAG);
+        serviceName = TAG;
+    }
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *

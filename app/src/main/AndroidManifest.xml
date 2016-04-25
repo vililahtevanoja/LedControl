@@ -25,8 +25,6 @@
         </activity>
         <activity android:name=".activities.DiskoLightActivity" />
 
-        <service android:name=".ledcontrol.features.timeofday.SimpleTimeOfDay" />
-
         <activity android:name=".activities.HandleBroadcastActivity" />
         <activity android:name=".activities.Broadcast" />
         <activity android:name=".activities.phoneColorActivity" />
@@ -60,6 +58,7 @@
                 <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_LIGHTING" />
             </intent-filter>
         </service>
+        <service android:name="fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler"></service>
 
         <activity android:name=".activities.RandomLightActivity"></activity>
     </application>
