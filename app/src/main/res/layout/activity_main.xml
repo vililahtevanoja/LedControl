@@ -34,8 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sound_pitch"
-        android:layout_marginTop="84dp"
-        android:layout_below="@+id/alarm"
+        android:layout_above="@+id/setColorsButton"
         android:layout_toStartOf="@+id/music" />
 
     <!--<TextView-->
@@ -74,6 +73,20 @@
         android:layout_gravity="center_horizontal"
         android:layout_alignBottom="@+id/phone"
         android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:id="@+id/timeofday"
+        android:background="@null"
+        android:clickable="false"
+        android:src="@drawable/timeofday"
+        android:cropToPadding="true"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/music"
+        />
 
     <Button
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private static final int DEFAULT_TRANSITION = 1;
     private static final int CURVE_REFINE_STEPS = 5;
     private static final String classPrefkey = "timeofday";
+    private static final String isAutomaticPrefKey = classPrefkey + ".isAutomatic";
     private static final String morningHourPrefkey = classPrefkey + ".morningHour";
     private static final String nightHourPrefKey = classPrefkey + ".nightHour";
     private static final String transitionPrefKey = classPrefkey + ".transitionHours";
