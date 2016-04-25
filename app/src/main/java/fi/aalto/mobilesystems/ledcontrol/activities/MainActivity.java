@@ -94,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
                 //startActivityForResult(intent, 1);
             }
         });
+
+        final ImageButton timeOfDayButton = (ImageButton) findViewById(R.id.timeofday);
+        timeOfDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(), TimeOfDayActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

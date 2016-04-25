@@ -32,6 +32,7 @@
         <activity android:name=".activities.mailColorActivity" />
         <activity android:name=".activities.alarmColorActivity" />
         <activity android:name=".activities.SetAlarmActivity" />
+        <activity android:name=".activities.TimeOfDayActivity"/>
 
         <receiver android:name=".models.MyBroadcastReceiver">
             <intent-filter>
