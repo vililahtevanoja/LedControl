@@ -74,6 +74,9 @@ public class ChangeLightService extends IntentService {
                 Log.d(TAG, "Alarm Intent Detected.");
                 break;
 
+            case "RestoreAlarm":
+                break;
+
         }
 
     }
@@ -105,5 +108,10 @@ public class ChangeLightService extends IntentService {
         mPHLight = mLightsMap.get(lightIdentifier);
         bridge.updateLightState(mPHLight,getPHLightStateWithRGB(mPHLight, color));
         Log.d(TAG, "updateLight with color");
+    }
+
+    private void updateLightWithState(String lightIdentifier, String lightState){
+        mPHLight = mLightsMap.get(lightIdentifier);
+        Log.d(TAG, "updateLight with lightState");
     }
 }

@@ -4,7 +4,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
+
+import com.philips.lighting.model.PHLightState;
 
 import java.util.Calendar;
 
@@ -44,6 +47,25 @@ public class Alarm {
 
         Log.d(TAG, "set alarm calendar:" + calendar.toString());
         Log.d(TAG,"set alarm light:" + lightIdentifier + " color:" + color);
+    }
+
+    public void setDelayAlarm(Context context, int second, String lightIdentifier, String lightState)
+    {
+        AlarmManager alarmMgr;
+        PendingIntent alarmIntent;
+
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, ChangeLightService.class);
+        intent.putExtra("lightIdentifier", lightIdentifier);
+        intent.putExtra("lightState", lightState);
+        intent.setAction("RestoreAlarm");
+        alarmIntent = PendingIntent.getService(context, 0, intent, 0);
+
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        second, alarmIntent);
+        Log.d(TAG, "set alarm delay:" + second);
+        Log.d(TAG, "set alarm light:" + lightIdentifier + " lightState:" + lightState);
     }
 
     public void CancelAlarm(Context context)
