@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
+import fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler;
 
 public class LedControl extends Application {
     private static final String TAG = "LedControl";
@@ -13,6 +14,8 @@ public class LedControl extends Application {
     private static Application sApplication;
 
     public static HandleBroadcastScene mBroadcastScene;
+
+    private static LedControlScheduler mScheduler;
 
     public static HandleBroadcastScene getBroadcastScene() {return mBroadcastScene;}
     public static void setBroadcastScene(HandleBroadcastScene scene){mBroadcastScene = scene;}
@@ -31,7 +34,7 @@ public class LedControl extends Application {
         Log.i(TAG, "Created");
         mBroadcastScene = new HandleBroadcastScene();
         sApplication = this;
-
+        mScheduler = new LedControlScheduler();
     }
 
     public static SharedPreferences getSharedPreferences() {
