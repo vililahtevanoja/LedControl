@@ -36,6 +36,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'me.priyesh:chroma:1.0.2'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.github.LarsWerkman:Lobsterpicker:1.0.1'
     compile files('libs/huelocalsdk.jar')
     compile files('libs/huesdkresources.jar')
     compile 'com.github.LarsWerkman:Lobsterpicker:1.0.1'

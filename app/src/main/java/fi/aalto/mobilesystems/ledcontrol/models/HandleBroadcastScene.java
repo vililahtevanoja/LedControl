@@ -10,9 +10,10 @@ import java.util.Map;
  * Created by ZSY on 4/18/16.
  */
 public class HandleBroadcastScene {
-    private Map<PHLight, PHLightState> IncomingCallScene;
-    private Map<PHLight, PHLightState> IncomingSMSScene;
-    private Map<PHLight, PHLightState> AlarmAlert;
+    private Map<String, Integer> IncomingCallScene;
+    private Map<String, Integer> IncomingSMSScene;
+    private Map<String, Integer> AlarmAlert;
+
 
     public HandleBroadcastScene() {
         this.IncomingCallScene = new HashMap<>();
@@ -20,27 +21,39 @@ public class HandleBroadcastScene {
         this.AlarmAlert = new HashMap<>();
 
     }
-    public void addIncomingCallScene(PHLight light, PHLightState state) {
-        IncomingCallScene.put(light, state);
+    public void addIncomingCallScene(String lightIdentifier, int color) {
+        IncomingCallScene.put(lightIdentifier, color);
     }
 
-    public void addIncomingSMSScene(PHLight light, PHLightState state) {
-        IncomingSMSScene.put(light, state);
+    public void removeIncomingCallScene(String lightIdentifier) {
+        IncomingCallScene.remove(lightIdentifier);
     }
 
-    public void addAlarmAlertScene(PHLight light, PHLightState state) {
-        AlarmAlert.put(light, state);
+    public void addIncomingSMSScene(String lightIdentifier, int color) {
+        IncomingSMSScene.put(lightIdentifier, color);
     }
 
-    public Map<PHLight, PHLightState> getIncomingCallScene() {
+    public void removeIncomingSMSScene(String lightIdentifier) {
+        IncomingSMSScene.remove(lightIdentifier);
+    }
+
+    public void addAlarmAlertScene(String lightIdentifier, int color) {
+        AlarmAlert.put(lightIdentifier, color);
+    }
+
+    public void removeAlarmAltertScene(String lightIdentifier) {
+        AlarmAlert.remove(lightIdentifier);
+    }
+
+    public Map<String, Integer> getIncomingCallScene() {
         return IncomingCallScene;
     }
 
-    public Map<PHLight, PHLightState> getIncomingSMSScene() {
+    public Map<String, Integer> getIncomingSMSScene() {
         return IncomingSMSScene;
     }
 
-    public Map<PHLight, PHLightState> getAlarmAlert() { return AlarmAlert;};
+    public Map<String, Integer> getAlarmAlert() { return AlarmAlert;};
 
     public void clearBroadcastScene() {
         IncomingSMSScene.clear();
