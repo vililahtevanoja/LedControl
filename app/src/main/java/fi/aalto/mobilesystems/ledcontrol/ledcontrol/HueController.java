@@ -33,15 +33,14 @@ public class HueController {
 
     public void connectToEmulatorAccessPoint() {
         PHAccessPoint ap = new PHAccessPoint();
-        ap.setIpAddress("130.233.85.37:8000");   // Philips Hue Emulator address
+        ap.setIpAddress("192.168.10.103:8000");   // Philips Hue Emulator address
         ap.setUsername("newdeveloper");
         this.sdk.connect(ap);
     }
 
     public static void testRequestToApi() {
         RequestQueue queue = Volley.newRequestQueue(LedControl.getContext());
-        String url = "http://130.233.86.82:8000/api/newdeveloper/";
-        //String url = "http://130.233.173.1/api/newdeveloper/";
+        String url = "http://192.168.10.103:8000/api/newdeveloper/";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

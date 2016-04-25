@@ -3,10 +3,11 @@
     package="fi.aalto.mobilesystems.ledcontrol">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".LedControl"
@@ -22,45 +23,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SetLightColorsActivity"></activity>
+        <activity android:name=".activities.DiskoLightActivity" />
 
-        <service android:name="fi.aalto.mobilesystems.ledcontrol.ledcontrol.features.timeofday.SimpleTimeOfDay"></service>
-        <activity android:name=".activities.HandleBroadcastActivity"></activity>
-        <activity android:name=".activities.Broadcast"></activity>
-        <activity android:name=".activities.phoneColorActivity"></activity>
-        <activity android:name=".activities.musicColorActivity"></activity>
-        <activity android:name=".activities.mailColorActivity"></activity>
-        <activity android:name=".activities.alarmColorActivity"></activity>
-        <activity android:name=".activities.SetAlarmActivity"></activity>
+        <service android:name=".ledcontrol.features.timeofday.SimpleTimeOfDay" />
 
-
+        <activity android:name=".activities.HandleBroadcastActivity" />
+        <activity android:name=".activities.Broadcast" />
+        <activity android:name=".activities.phoneColorActivity" />
+        <activity android:name=".activities.musicColorActivity" />
+        <activity android:name=".activities.mailColorActivity" />
+        <activity android:name=".activities.alarmColorActivity" />
+        <activity android:name=".activities.SetAlarmActivity" />
 
         <receiver android:name=".models.MyBroadcastReceiver">
-
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-                <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="com.android.deskclock.ALARM_ALERT"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="com.android.deskclock.ALARM_ALERT" />
             </intent-filter>
-
         </receiver>
+
         <service android:name=".services.SimpleTimeOfDay">
             <intent-filter>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.START"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.STOP"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.UPDATE"/>
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.START" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.STOP" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.UPDATE" />
             </intent-filter>
         </service>
         <service android:name=".services.AutomaticTimeOfDay">
             <intent-filter>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.START"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.STOP"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.HALT"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.RESUME"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_DATA"/>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_LIGHTING"/>
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.START" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.STOP" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.HALT" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.RESUME" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_DATA" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_LIGHTING" />
             </intent-filter>
         </service>
+
+        <activity android:name=".activities.RandomLightActivity"></activity>
     </application>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
 </manifest>

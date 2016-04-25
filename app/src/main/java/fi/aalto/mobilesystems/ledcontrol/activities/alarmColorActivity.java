@@ -3,7 +3,6 @@ package fi.aalto.mobilesystems.ledcontrol.activities;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 
 import com.larswerkman.lobsterpicker.LobsterPicker;
-import com.larswerkman.lobsterpicker.OnColorListener;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.utilities.PHUtilities;
 import com.philips.lighting.model.PHLight;
@@ -81,9 +79,7 @@ public class alarmColorActivity extends AppCompatActivity {
     */
 
     public void addListenerOnButton(){
-
         submitButton = (ImageButton) findViewById(R.id.OK);
-
         submitButton.setOnClickListener(new View.OnClickListener(){
 
             @Override

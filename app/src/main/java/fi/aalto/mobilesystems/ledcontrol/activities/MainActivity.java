@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -26,6 +27,15 @@ public class MainActivity extends AppCompatActivity {
         this.handler = new HueController();
         this.handler.startBridgeSearch();
         this.handler.connectToEmulatorAccessPoint();
+
+        final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
+        setLightColoursButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(), RandomLightActivity.class);
+                startActivity(intent);
+            }
+        });
 
 //        final Button handleBroadcastButton = (Button) findViewById(R.id.handleBroadcastButton);
 //        handleBroadcastButton.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageButton mail = (ImageButton) findViewById(R.id.mail);
         mail.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), mailColorActivity.class);
                 startActivity(intent);
@@ -57,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageButton phone = (ImageButton) findViewById(R.id.phone);
         phone.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), phoneColorActivity.class);
                 startActivity(intent);
@@ -66,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageButton music = (ImageButton) findViewById(R.id.music);
         music.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), musicColorActivity.class);
                 startActivity(intent);
@@ -74,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ImageButton setAlarmButton = (ImageButton) findViewById(R.id.alarm);
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), SetAlarmActivity.class);
                 startActivity(intent);
