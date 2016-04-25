@@ -53,6 +53,10 @@ public class HueListener implements PHSDKListener {
             stringBuilder.append(", MAC: " + ap.getMacAddress());
         }
         Log.i(TAG, stringBuilder.toString());
+        if (accessPointList != null && accessPointList.size() > 0) {
+            this.sdk.getAccessPointsFound().clear();
+            this.sdk.getAccessPointsFound().addAll(accessPointList);
+        }
     }
 
     @Override

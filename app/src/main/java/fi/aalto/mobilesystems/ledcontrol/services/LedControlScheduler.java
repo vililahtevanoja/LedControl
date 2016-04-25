@@ -9,14 +9,20 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.philips.lighting.hue.listener.PHLightListener;
 import com.philips.lighting.hue.sdk.PHAccessPoint;
+import com.philips.lighting.hue.sdk.PHBridgeSearchManager;
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.hue.sdk.PHSDKListener;
 import com.philips.lighting.model.PHBridge;
 import com.philips.lighting.model.PHBridgeConfiguration;
+import com.philips.lighting.model.PHBridgeResource;
+import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
+import com.philips.lighting.model.PHLight;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -24,7 +30,7 @@ import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueController;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueProperties;
 
-public class LedControlScheduler extends IntentService implements PHSDKListener {
+public class LedControlScheduler extends IntentService implements PHSDKListener, PHLightListener {
     private final static String TAG = "LedControlScheduler";
     private String serviceName = "LedControlScheduler";
     private PHHueSDK sdk;
@@ -32,6 +38,12 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
     public LedControlScheduler() {
         super(TAG);
         serviceName = TAG;
+        HueProperties.loadProperties();
+        this.sdk = PHHueSDK.getInstance();
+        this.sdk.getNotificationManager().registerSDKListener(this);
+        this.sdk.setAppName("LedControl");
+        this.sdk.setDeviceName(android.os.Build.MODEL);
+        findBridges();
     }
 
     /**
@@ -42,10 +54,25 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
     public LedControlScheduler(String name) {
         super(name);
         serviceName = name;
+        HueProperties.loadProperties();
+        this.sdk = PHHueSDK.getInstance();
+        this.sdk.getNotificationManager().registerSDKListener(this);
+        this.sdk.setAppName("LedControl");
+        this.sdk.setDeviceName(android.os.Build.MODEL);
+        findBridges();
     }
 
+    @Override
     public void onCreate() {
+        super.onCreate();
+        HueProperties.loadProperties();
         this.sdk = PHHueSDK.getInstance();
+        findBridges();
+    }
+
+    public void findBridges() {
+        PHBridgeSearchManager pm = (PHBridgeSearchManager) this.sdk.getSDKService(PHHueSDK.SEARCH_BRIDGE);
+        pm.search(true, true);
     }
 
     @Nullable
@@ -67,7 +94,9 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
         String ipAddress = phBridge.getResourceCache().getBridgeConfiguration().getIpAddress();
         HueProperties.setUsername(username);
         HueProperties.setIpAddress(ipAddress);
+        HueProperties.saveProperties();
         Log.d(TAG, "Bridge connected with username: " + username + ", IP: " + ipAddress);
+        phBridge.findNewLights(this);
     }
 
     @Override
@@ -87,11 +116,24 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
             stringBuilder.append(", MAC: " + ap.getMacAddress());
         }
         Log.i(TAG, stringBuilder.toString());
+        this.sdk.getAccessPointsFound().clear();
+        this.sdk.getAccessPointsFound().addAll(accessPointList);
+        this.sdk.connect(this.sdk.getAccessPointsFound().get(0));
+    }
+
+    @Override
+    public void onSuccess() {
+
     }
 
     @Override
     public void onError(int i, String s) {
         Log.e(TAG, "ERROR " +  Integer.toString(i) + ": " + HueController.hueErrorToString(i) + " - " + s);
+    }
+
+    @Override
+    public void onStateUpdate(Map<String, String> map, List<PHHueError> list) {
+
     }
 
     @Override
@@ -115,5 +157,35 @@ public class LedControlScheduler extends IntentService implements PHSDKListener 
 
     public void onHandleIntent(Intent intent) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        this.sdk.getNotificationManager().unregisterSDKListener(this);
+        PHBridge selectedBridge = this.sdk.getSelectedBridge();
+        if (selectedBridge != null) {
+
+            if (this.sdk.isHeartbeatEnabled(selectedBridge)) {
+                this.sdk.disableHeartbeat(selectedBridge);
+            }
+
+            this.sdk.disconnect(selectedBridge);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onReceivingLightDetails(PHLight phLight) {
+
+    }
+
+    @Override
+    public void onReceivingLights(List<PHBridgeResource> list) {
+
+    }
+
+    @Override
+    public void onSearchComplete() {
+        Log.i(TAG, "Search for lights complete");
     }
 }
