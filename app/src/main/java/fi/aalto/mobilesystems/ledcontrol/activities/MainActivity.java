@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -25,14 +24,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         HueProperties.loadProperties();
 
-       /* final Button setLightColoursButton = (Button) findViewById(R.id.setColorsButton);
+        final ImageButton setLightColoursButton = (ImageButton) findViewById(R.id.discoButton);
         setLightColoursButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), RandomLightActivity.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
 
         final ImageButton setPhoneButton = (ImageButton) findViewById(R.id.phoneButton);
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(LedControl.getContext(), SelectLightColorActivity.class);
                 intent.setAction(SelectLightColorActivity.Actions.PhoneCall);
                 startActivity(intent);
-                //startActivityForResult(intent, 1);
             }
         });
 

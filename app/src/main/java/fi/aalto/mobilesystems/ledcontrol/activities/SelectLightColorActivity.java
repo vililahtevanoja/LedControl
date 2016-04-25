@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.larswerkman.lobsterpicker.LobsterPicker;
@@ -26,6 +25,7 @@ import com.philips.lighting.model.PHLight;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
@@ -66,6 +66,10 @@ public class SelectLightColorActivity extends AppCompatActivity {
         initialize();
 
         this.sdk = PHHueSDK.getInstance();
+        if(this.sdk.getSelectedBridge() == null){
+            Log.e(TAG, "Bridge is null");
+            return;
+        }
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
         mNameIdentifierMap = new HashMap<>();

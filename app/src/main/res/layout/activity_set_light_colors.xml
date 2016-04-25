@@ -15,8 +15,9 @@
         android:layout_height="wrap_content"
         android:text="Switch On"
         android:id="@+id/setButtonOn"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/testHari"
+        android:layout_alignStart="@+id/testHari"
+        android:layout_marginTop="70dp" />
 
     <TextView
         android:layout_width="wrap_content"

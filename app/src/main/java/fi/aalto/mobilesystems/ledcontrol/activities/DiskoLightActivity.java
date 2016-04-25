@@ -29,7 +29,7 @@ public class DiskoLightActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disko_light);
+        setContentView(R.layout.activity_random_light);
         StartBtn = (Button) findViewById(R.id.start);
         CancelBtn = (Button) findViewById(R.id.cancel);
         StartBtn.setOnClickListener(new View.OnClickListener() {

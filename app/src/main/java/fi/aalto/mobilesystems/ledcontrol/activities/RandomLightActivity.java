@@ -2,6 +2,7 @@ package fi.aalto.mobilesystems.ledcontrol.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,12 +30,12 @@ public class RandomLightActivity extends AppCompatActivity {
     Button StartBtn, CancelBtn;
     EditText EtTime;
     Timer timer;
-    DiskoLight task;
+    RandomBlinkLight task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disko_light);
+        setContentView(R.layout.activity_random_light);
         ShotCheckBox = (CheckBox) findViewById(R.id.shot);
         EtTime = (EditText) findViewById(R.id.edt_time);
         StartBtn = (Button) findViewById(R.id.start);
@@ -54,7 +55,7 @@ public class RandomLightActivity extends AppCompatActivity {
 
 
                 timer = new Timer();
-                task = new DiskoLight();
+                task = new RandomBlinkLight();
 
                 if (ShotCheckBox.isChecked()){
                     //single call
@@ -79,7 +80,7 @@ public class RandomLightActivity extends AppCompatActivity {
 
     }
 
-    class DiskoLight extends TimerTask {
+    class RandomBlinkLight extends TimerTask {
         @Override
         public void run() {
             runOnUiThread(new Runnable() {
@@ -94,6 +95,11 @@ public class RandomLightActivity extends AppCompatActivity {
 
     public void randomLights() {
         this.sdk = PHHueSDK.getInstance();
+        if(this.sdk.getSelectedBridge() == null) {
+            Log.e("Random Light", "Bridge is null");
+            return;
+        }
+
         List<PHLight> allLights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         Random rand = new Random();
 

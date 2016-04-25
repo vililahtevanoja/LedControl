@@ -21,7 +21,8 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mention the time to blink lights" />
+            android:text="Mention the time to blink lights, default time is 1s"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -37,16 +38,42 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="16.77"
             android:hint="1000"
-            android:inputType="number" />
+            android:inputType="number"
+            android:text="Give time" />
 
         <CheckBox
             android:id="@+id/shot"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="120dp"
+            android:layout_marginLeft="65dp"
             android:layout_weight="9.24"
-            android:text="Single" />
+            android:text="Only Once at a Time" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/soundHertz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sound Hertz"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"/>
+
+        <CheckBox
+            android:id="@+id/diskoLight"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="70dp"
+            android:layout_weight="9.24"
+            android:text="Enable Disko Light" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,10 +84,11 @@
 
         <Button
             android:id="@+id/start"
-            android:layout_width="match_parent"
+            android:layout_width="131dp"
             android:layout_height="65dp"
             android:layout_gravity="center_vertical"
-            android:text="Start DiskoLight" />
+            android:text="Start Blinking"
+            android:layout_weight="104.35" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,9 +99,10 @@
 
         <Button
             android:id="@+id/cancel"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
             android:layout_height="63dp"
-            android:text="Stop Disko Light" />
+            android:text="Stop Blinking"
+            android:layout_weight="145" />
     </LinearLayout>
 
 </LinearLayout>
