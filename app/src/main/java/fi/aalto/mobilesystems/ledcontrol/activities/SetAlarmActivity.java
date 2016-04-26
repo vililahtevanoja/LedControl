@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.philips.lighting.hue.sdk.PHHueSDK;
+
 import java.util.Calendar;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -27,6 +29,7 @@ public class SetAlarmActivity extends AppCompatActivity {
     private int mHour;
     private int mMin;
     private int mColor;
+    private PHHueSDK sdk;
     private Button mSelectBulbButton;
     private String lightIdentifier;
     private Calendar mCalendar;
@@ -36,6 +39,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_alert);
 
+        this.sdk = PHHueSDK.getInstance();
         mTimePicker=(TimePicker)findViewById(R.id.alarmTime);
         mSelectBulbButton = (Button) findViewById(R.id.light_button);
 
@@ -82,6 +86,15 @@ public class SetAlarmActivity extends AppCompatActivity {
     }
 
     public void selectLight(View view) {
+
+        if(this.sdk.getSelectedBridge() == null)
+        {
+            Log.d(TAG, "No bridge found");
+            Toast.makeText(SetAlarmActivity.this,
+                    "No bridge found",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(LedControl.getContext(),SelectLightColorActivity.class);
         intent.setAction(SelectLightColorActivity.Actions.Alarm);
         startActivityForResult(intent, 1);

@@ -146,7 +146,7 @@ public class ChangeLightService extends IntentService {
     private void setRestore(String lightIdentifier, PHLightState state)
     {
         Alarm alarm = new Alarm();
-        alarm.setRestoreAlarm(this, 5, lightIdentifier, state);
+        alarm.setRestoreAlarm(this, 60*1000, lightIdentifier, state);
     }
 
 }

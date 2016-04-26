@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:id="@+id/linearLayout1"
         >
         <ImageButton
@@ -41,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout2"
+        android:layout_marginBottom="40dp"
         android:layout_below="@+id/linearLayout1">
 
         <ImageButton
@@ -51,14 +53,6 @@
             android:padding="10dip"
             android:layout_weight="1"/>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sound_pitch"
-            android:layout_marginTop="84dp"
-            android:layout_below="@+id/alarm"
-            android:layout_toStartOf="@+id/music" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -76,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout3"
+        android:layout_marginBottom="40dp"
         android:layout_below="@+id/linearLayout2">
 
         <ImageButton

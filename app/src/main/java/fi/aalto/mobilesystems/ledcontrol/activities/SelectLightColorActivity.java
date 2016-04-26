@@ -1,6 +1,8 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.larswerkman.lobsterpicker.LobsterPicker;
@@ -26,6 +27,7 @@ import com.philips.lighting.model.PHLight;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
 import fi.aalto.mobilesystems.ledcontrol.models.HandleBroadcastScene;
@@ -63,9 +65,27 @@ public class SelectLightColorActivity extends AppCompatActivity {
         mButtonCancel = (ImageButton) findViewById(R.id.cancelButton);
         mLobsterPicker = (LobsterPicker) findViewById(R.id.lobsterpicker);
         mSpinner = (Spinner) findViewById(R.id.spinnerLight);
-        initialize();
 
         this.sdk = PHHueSDK.getInstance();
+
+        if(this.sdk.getSelectedBridge() == null)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("No bridge found.")
+                    .setTitle("Oops");
+            AlertDialog dialog = builder.create();
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+            dialog.show();
+            Log.d(TAG, "No bridge found");
+            return;
+        }
+        initialize();
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
         mNameIdentifierMap = new HashMap<>();
@@ -237,6 +257,9 @@ public class SelectLightColorActivity extends AppCompatActivity {
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         super.onDestroy();  // Always call the superclass
+
+        if(msharedPrefs == null)
+            return;
 
         SharedPreferences.Editor prefsEditor = msharedPrefs.edit();
         Gson gson = new Gson();
