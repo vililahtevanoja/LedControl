@@ -32,7 +32,6 @@
         <activity android:name=".activities.HandleBroadcastActivity" />
         <activity android:name=".activities.SetAlarmActivity" />
         <activity android:name=".activities.TimeOfDayActivity"/>
-        <activity android:name=".activities.SelectLightColorActivity"></activity>
         <activity android:name=".activities.SelectLightColorActivity"
                   android:screenOrientation="portrait"/>
 
@@ -63,14 +62,14 @@
                 <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.UPDATE_LIGHTING" />
             </intent-filter>
         </service>
-        <service android:name="fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler"></service>
+        <service android:name="fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler" />
 
-        <activity android:name=".activities.RandomLightActivity"></activity>
+        <activity android:name=".activities.RandomLightActivity" />
 
 
         <receiver android:name=".models.AutoStart">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
