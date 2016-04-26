@@ -1,11 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.app.IntentService;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -22,19 +18,17 @@ import com.philips.lighting.model.PHHueError;
 import com.philips.lighting.model.PHHueParsingError;
 import com.philips.lighting.model.PHLight;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
 
-import fi.aalto.mobilesystems.ledcontrol.LedControl;
-import fi.aalto.mobilesystems.ledcontrol.R;
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueController;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueProperties;
 
 public class LedControlScheduler extends IntentService implements PHSDKListener, PHLightListener {
     private final static String TAG = "LedControlScheduler";
     private String serviceName = "LedControlScheduler";
     private PHHueSDK sdk;
+    private HashMap<Integer, String> errorMap;
 
     public LedControlScheduler() {
         super(TAG);
@@ -43,6 +37,7 @@ public class LedControlScheduler extends IntentService implements PHSDKListener,
         this.sdk = PHHueSDK.getInstance();
         this.sdk.getNotificationManager().registerSDKListener(this);
         findBridges();
+        this.errorMap = getErrorMap();
     }
 
     /**
@@ -127,7 +122,7 @@ public class LedControlScheduler extends IntentService implements PHSDKListener,
 
     @Override
     public void onError(int i, String s) {
-        Log.e(TAG, "ERROR " +  Integer.toString(i) + ": " + HueController.hueErrorToString(i) + " - " + s);
+        Log.e(TAG, "ERROR " +  Integer.toString(i) + ": " + this.hueErrorToString(i) + " - " + s);
     }
 
     @Override
@@ -186,5 +181,50 @@ public class LedControlScheduler extends IntentService implements PHSDKListener,
     @Override
     public void onSearchComplete() {
         Log.i(TAG, "Search for lights complete");
+    }
+
+    public String hueErrorToString(int errno) {
+        if (this.errorMap.containsKey(errno)) {
+            return this.errorMap.get(errno);
+        }
+        else {
+            return "UNKNOWN_ERROR";
+        }
+    }
+
+    private HashMap<Integer, String> getErrorMap() {
+        HashMap<Integer, String> errorMap = new HashMap<>();
+        errorMap.put(PHHueError.NO_CONNECTION, "NO_CONNECTION");
+        errorMap.put(PHHueError.INVALID_PARAMETERS, "INVALID_PARAMETERS");
+        errorMap.put(PHHueError.INVALID_PARAMETERS_MISSING_URL, "INVALID_PARAMETERS_MISSING_URL");
+        errorMap.put(PHHueError.INVALID_PARAMETERS_INVALID_METHOD, "INVALID_PARAMETERS_INVALID_METHOD");
+        errorMap.put(PHHueError.BRIDGE_ALREADY_CONNECTED, "BRIDGE_ALREADY_CONNECTED");
+        errorMap.put(PHHueError.LIGHT_ID_NOT_FOUND, "LIGHT_ID_NOT_FOUND");
+        errorMap.put(PHHueError.UNABLE_TO_PROCESS_REQUEST, "UNABLE_TO_PROCESS_REQUEST");
+        errorMap.put(PHHueError.GROUP_ID_NOT_FOUND, "GROUP_ID_NOT_FOUND");
+        errorMap.put(PHHueError.INVALID_DATA, "INVALID_DATA");
+        errorMap.put(PHHueError.UNSUPPORTED_BRIDGE_RESPONSE, "UNSUPPORTED_BRIDGE_RESPONSE");
+        errorMap.put(PHHueError.BRIDGE_NOT_RESPONDING, "BRIDGE_NOT_RESPONDING");
+        errorMap.put(PHHueError.FIND_LIGHT_ERROR, "FIND_LIGHT_ERROR");
+        errorMap.put(PHHueError.DISABLED_PORTAL_SERVICE, "DISABLED_PORTAL_SERVICE");
+        errorMap.put(PHHueError.SOFTWARE_UPDATE_NOT_AVAILABLE, "SOFTWARE_UPDATE_NOT_AVAILABLE");
+        errorMap.put(PHHueError.UNSUPPORTED_BRIDGE_VERSION, "UNSUPPORTED_BRIDGE_VERSION");
+        errorMap.put(PHHueError.INVALID_OBJECT_PARAMETER, "INVALID_OBJECT_PARAMETER");
+        errorMap.put(PHHueError.INVALID_JSON, "INVALID_JSON");
+        errorMap.put(PHHueError.NO_DATA_FOUND, "NO_DATA_FOUND");
+        errorMap.put(PHHueError.CLIP_ERROR, "CLIP_ERROR");
+        errorMap.put(PHHueError.INVALID_API_CALL, "INVALID_API_CALL");
+        errorMap.put(PHHueError.PORTAL_NOT_RESPONDING, "PORTAL_NOT_RESPONDING");
+        errorMap.put(PHHueError.SOFTWARE_UPDATE_DOWNLOADING, "SOFTWARE_UPDATE_DOWNLOADING");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_CONFIG, "RESOURCE_UNPARSABLE_CONFIG");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_LIGHT, "RESOURCE_UNPARSABLE_LIGHT");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_GROUP, "RESOURCE_UNPARSABLE_GROUP");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_SCENE, "RESOURCE_UNPARSABLE_SCENE");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_SCHEDULE, "RESOURCE_UNPARSABLE_SCHEDULE");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_SENSOR, "RESOURCE_UNPARSABLE_SENSOR");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_RULE, "RESOURCE_UNPARSABLE_RULE");
+        errorMap.put(PHHueError.RESOURCE_UNPARSABLE_MULTI_LIGHT, "RESOURCE_UNPARSABLE_MULTI_LIGHT");
+        errorMap.put(PHHueError.AUTHENTICATION_FAILED, "AUTHENTICATION_FAILED");
+        return errorMap;
     }
 }

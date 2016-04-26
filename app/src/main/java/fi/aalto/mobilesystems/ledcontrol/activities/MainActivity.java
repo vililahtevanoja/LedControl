@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueController;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueProperties;
 
 public class MainActivity extends AppCompatActivity {
