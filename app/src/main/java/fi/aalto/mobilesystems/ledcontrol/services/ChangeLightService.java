@@ -57,29 +57,29 @@ public class ChangeLightService extends IntentService {
 
         switch (intent.getAction()) {
             case "android.intent.action.PHONE_STATE":
-                updateLightWithScene(IncomingCallScene);
                 Log.d(TAG, "PHONE_STATE Intent Detected.");
+                updateLightWithScene(IncomingCallScene);
                 break;
 
             case "android.provider.Telephony.SMS_RECEIVED":
+                Log.d(TAG, "SMS_RECEIVED Intent Detected.");
                 updateLightWithScene(IncomingSMSScene);
-                Log.d(TAG, "PHONE_STATE Intent Detected.");
                 break;
 
             case "com.android.deskclock.ALARM_ALERT":
-                updateLightWithScene(AlarmAlert);
                 Log.d(TAG, "ALARM_ALERT Intent Detected.");
+                updateLightWithScene(AlarmAlert);
                 break;
 
             case "Alarm":
-                updateLight(intent.getStringExtra("lightIdentifier"), intent.getIntExtra("color",0));
                 Log.d(TAG, "Alarm Intent Detected.");
+                updateLight(intent.getStringExtra("lightIdentifier"), intent.getIntExtra("color", 0));
                 break;
 
             case "RestoreAlarm":
+                Log.d(TAG, "RestoreAlarm Intent Detected.");
                 updateLightWithState(intent.getStringExtra("lightIdentifier"),
                         intent.getStringExtra("lightState"));
-                Log.d(TAG, "RestoreAlarm Intent Detected.");
                 break;
 
         }
@@ -114,7 +114,7 @@ public class ChangeLightService extends IntentService {
 
         mPHLight = mLightsMap.get(lightIdentifier);
         bridge.updateLightState(mPHLight,getPHLightStateWithRGB(mPHLight, color));
-        Log.d(TAG, "updateLight with color");
+        Log.d(TAG, "updateLight with color" + "Light:" + lightIdentifier + " color:" + color);
     }
 
     private void updateLightWithState(String lightIdentifier, String lightState)

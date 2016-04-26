@@ -58,6 +58,8 @@ public class SelectLightColorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
+       // initialize();
         setContentView(R.layout.activity_select_light_color);
 
 
@@ -85,9 +87,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
             Log.d(TAG, "No bridge found");
             return;
         }
-        initialize();
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
-        mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
         mNameIdentifierMap = new HashMap<>();
 
         for (PHLight light : lights) {
@@ -109,7 +109,8 @@ public class SelectLightColorActivity extends AppCompatActivity {
 
             @Override
             public void onColorSelected(@ColorInt int color) {
-                    mColor = color;
+               // Log.d(TAG,"onColorSelected");
+                mColor = color;
             }
         });
 
@@ -121,13 +122,17 @@ public class SelectLightColorActivity extends AppCompatActivity {
                     case Actions.PhoneCall:
                         mBroadcastScene.addIncomingCallScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
-                        Log.d(TAG, "Incoming Phone call: add to scene");
+                        Log.d(TAG, "Incoming Phone call: add to scene " + "Light name:"
+                            + mSpinner.getSelectedItem() + "color:"
+                            +mColor);
                         break;
 
                     case Actions.SMS:
                         mBroadcastScene.addIncomingSMSScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
-                        Log.d(TAG, "Incoming SMS: add to scene");
+                        Log.d(TAG, "Incoming SMS: add to scene "+ "Light name:"
+                                + mSpinner.getSelectedItem() + "color:"
+                                +mColor);
                         break;
 
                     case Actions.Alarm:
@@ -138,7 +143,9 @@ public class SelectLightColorActivity extends AppCompatActivity {
                         setResult(Activity.RESULT_OK, returnIntent);
                         mBroadcastScene.addAlarmAlertScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()), mColor);
-                        Log.d(TAG, "Alarm clock: add to scene");
+                        Log.d(TAG, "Alarm clock: add to scene" + "Light name:"
+                                + mSpinner.getSelectedItem() + "color:"
+                                +mColor);
                         finish();
                         break;
                 }
