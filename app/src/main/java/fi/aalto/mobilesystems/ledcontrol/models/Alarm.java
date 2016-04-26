@@ -38,7 +38,9 @@ public class Alarm {
         AlarmManager alarmMgr =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, ChangeLightService.class);
         intent.putExtra("lightIdentifier", lightIdentifier);
-        intent.putExtra("color", color);
+        //intent.putExtra("color", color);
+        String strColor = Integer.toString(color);
+        intent.putExtra("newColor", strColor);
         intent.setAction("Alarm");
         PendingIntent alarmIntent = PendingIntent.getService(context, 0, intent, 0);
 
@@ -47,7 +49,7 @@ public class Alarm {
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
         Log.d(TAG, "set alarm calendar:" + calendar.toString());
-        Log.d(TAG,"set alarm light:" + lightIdentifier + " color:" + color);
+        Log.d(TAG,"set alarm light:" + lightIdentifier + " color:" + color + "color String:" + strColor);
     }
 
     public void setRestoreAlarm(Context context, int second, String lightIdentifier, PHLightState lightState)
