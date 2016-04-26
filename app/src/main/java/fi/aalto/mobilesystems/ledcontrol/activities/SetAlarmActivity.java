@@ -70,6 +70,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         mCalendar.setTimeInMillis(System.currentTimeMillis());
         mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
         mCalendar.set(Calendar.MINUTE, mMin);
+        mCalendar.set(Calendar.SECOND, 0);
 
         Alarm alarm = new Alarm();
         alarm.SetAlarm(this, mCalendar, lightIdentifier, mColor);
