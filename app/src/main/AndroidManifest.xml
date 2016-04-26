@@ -46,19 +46,19 @@
 
         <service android:name=".services.SimpleTimeOfDay">
             <intent-filter>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.START" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.STOP" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.IntentActions.UPDATE" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.START" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.STOP" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay.UPDATE" />
             </intent-filter>
         </service>
         <service android:name=".services.AutomaticTimeOfDay">
             <intent-filter>
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.START" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.STOP" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.HALT" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.RESUME" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_DATA" />
-                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.IntentActions.UPDATE_LIGHTING" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.START" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.STOP" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.HALT" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.RESUME" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.UPDATE_DATA" />
+                <action android:name="fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay.UPDATE_LIGHTING" />
             </intent-filter>
         </service>
         <service android:name="fi.aalto.mobilesystems.ledcontrol.services.LedControlScheduler"></service>

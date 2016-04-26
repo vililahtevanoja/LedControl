@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -41,8 +42,16 @@ public class LedControlScheduler extends IntentService implements PHSDKListener,
         HueProperties.loadProperties();
         this.sdk = PHHueSDK.getInstance();
         this.sdk.getNotificationManager().registerSDKListener(this);
-        this.sdk.setAppName("LedControl");
-        this.sdk.setDeviceName(android.os.Build.MODEL);
+        if (Build.PRODUCT.contains("sdk_google")) {
+            Log.i(TAG, "Build.PRODUCT: " + Build.PRODUCT);
+            Log.i(TAG, "Emulator detected, connecting to Hue emulator access point");
+            this.sdk.setAppName("LedControl");
+            this.sdk.setDeviceName(android.os.Build.MODEL);
+            PHAccessPoint ap = new PHAccessPoint();
+            ap.setIpAddress("10.0.2.2:8000");
+            ap.setUsername(HueProperties.getUsername());
+            this.sdk.connect(ap);
+        }
         findBridges();
     }
 

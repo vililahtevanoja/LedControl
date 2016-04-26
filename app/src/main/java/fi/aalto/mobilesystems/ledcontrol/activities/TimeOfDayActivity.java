@@ -1,6 +1,10 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +18,7 @@ import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
+import fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay;
 
 public class TimeOfDayActivity extends AppCompatActivity {
     private final static String TAG = "TimeOfDayActivity";
@@ -114,11 +119,13 @@ public class TimeOfDayActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
+                startTimeOfDay();
                 mCurrentToast.cancel();
                 mCurrentToast = Toast.makeText(TimeOfDayActivity.this, "Time of day enabled", Toast.LENGTH_LONG);
                 mCurrentToast.show();
             }
             else {
+                stopTimeOfDay();
                 mCurrentToast.cancel();
                 mCurrentToast = Toast.makeText(TimeOfDayActivity.this, "Time of day disabled", Toast.LENGTH_LONG);
                 mCurrentToast.show();
@@ -146,4 +153,38 @@ public class TimeOfDayActivity extends AppCompatActivity {
             mCurrentToast.show();
         }
     };
+
+    private void startTimeOfDay() {
+        AlarmManager am = (AlarmManager)LedControl.getContext().getSystemService(ALARM_SERVICE);
+        if (mIsAutomatic.isSelected()) {
+
+        }
+        else {
+            Intent startIntent = new Intent(getString(R.string.simpletimeofday_action_start),
+                    Uri.EMPTY, LedControl.getContext(), SimpleTimeOfDay.class);
+            this.startService(startIntent);
+            Intent updateIntent = new Intent(getString(R.string.simpletimeofday_action_update),
+                    Uri.EMPTY, LedControl.getContext(), SimpleTimeOfDay.class);
+            PendingIntent pendingUpdateIntent = PendingIntent.getService(LedControl.getContext(),
+                    1, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            am.setRepeating(AlarmManager.ELAPSED_REALTIME, 3000L, 3000L, pendingUpdateIntent);
+        }
+    }
+
+    private void stopTimeOfDay() {
+        AlarmManager am = (AlarmManager)LedControl.getContext().getSystemService(ALARM_SERVICE);
+        if (mIsAutomatic.isSelected()) {
+
+        }
+        else {
+            Intent updateIntent = new Intent(getString(R.string.simpletimeofday_action_update),
+                    Uri.EMPTY, LedControl.getContext(), SimpleTimeOfDay.class);
+            PendingIntent pendingUpdateIntent = PendingIntent.getService(LedControl.getContext(),
+                    1, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pendingUpdateIntent);
+            Intent stopIntent = new Intent(getString(R.string.simpletimeofday_action_stop), Uri.EMPTY,
+                    LedControl.getContext(), SimpleTimeOfDay.class);
+            LedControl.getContext().startService(stopIntent);
+        }
+    }
 }

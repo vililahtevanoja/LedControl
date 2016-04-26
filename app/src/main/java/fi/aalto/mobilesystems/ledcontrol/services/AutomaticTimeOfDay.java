@@ -1,6 +1,7 @@
 package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -28,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -53,6 +56,7 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     private Calendar sunrise;
     private Calendar sunset;
     private Curve colorTemperatureCurve;
+    private List<PendingIntent> intents;
     private double transitionHours;
     private boolean canGetLocation;
     private boolean enabled;

@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.TimePicker;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
 import com.philips.lighting.model.PHBridge;
@@ -20,8 +21,9 @@ import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Curve;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.SimpleColorTemperatureCurve;
 
-public class SimpleTimeOfDay extends IntentService implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SimpleTimeOfDay extends IntentService implements TimePicker.OnTimeChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "SimpleTimeOfDay";
+    private PHHueSDK sdk;
     private static final int DEFAULT_MORNING = 6;
     private static final int DEFAULT_NIGHT = 22;
     private static final int DEFAULT_TRANSITION = 1;
@@ -38,6 +40,11 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     private boolean enabled;
     private Curve colourTemperatureCurve;
     private SharedPreferences sharedPrefs;
+
+    @Override
+    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        updateLights();
+    }
 
     public static class IntentActions {
         public final static String Start = LedControl.getStringResource(R.string.simpletimeofday_action_start);
@@ -64,6 +71,7 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
     }
 
     protected void initialize() {
+        this.sdk = PHHueSDK.getInstance();
         Context ctx = LedControl.getContext();
         String preferencesKey = ctx.getString(R.string.shared_preferences_key);
         this.sharedPrefs = LedControl.getContext().getSharedPreferences(preferencesKey, MODE_PRIVATE);
@@ -134,36 +142,42 @@ public class SimpleTimeOfDay extends IntentService implements SharedPreferences.
         return this.colourTemperatureCurve.getPointOnCurve(transitionValue);
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        PHHueSDK sdk = PHHueSDK.getInstance();
-        String action = intent.getAction();
-        Log.i(TAG, "Intent received with action " + action);
-        if (action == null)
-            return;
-        if (action.equals(IntentActions.Stop)) {
-            this.enabled = false;
-        }
-        else if (action.equals(IntentActions.Start)) {
-            this.enabled = true;
-            updateTimes();
-        }
-        else if (action.equals(IntentActions.Update)) {
-            if (!this.enabled) {
-                return;
-            }
-        }
+    public void updateLights() {
         PHLightState state = new PHLightState();
         PointF p = getCurrentColorPoint();
         state.setX(p.x);
         state.setY(p.y);
         Log.i(TAG, "Updating light color to " + p.toString());
-        for (PHBridge bridge : sdk.getAllBridges()) {
+        for (PHBridge bridge : this.sdk.getAllBridges()) {
             for (PHLight light : bridge.getResourceCache().getAllLights()) {
                 bridge.updateLightState(light, state);
             }
         }
+    }
 
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        String action = intent.getAction();
+        Log.i(TAG, "Intent received with action " + action);
+        if (action == null)
+            return;
+        if (action.equals(IntentActions.Stop)) {
+            Log.i(TAG, "Stopping SimpleTimeOfDay");
+            this.enabled = false;
+        }
+        else if (action.equals(IntentActions.Start)) {
+            Log.i(TAG, "Starting SimpleTimeOfDay");
+            this.enabled = true;
+            updateTimes();
+            updateLights();
+        }
+        else if (action.equals(IntentActions.Update)) {
+            Log.i(TAG, "Updating SimpleTimeOfDay");
+            if (!this.enabled) {
+                return;
+            }
+            updateLights();
+        }
     }
 
     @Override
