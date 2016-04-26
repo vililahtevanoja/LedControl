@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +22,10 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import fi.aalto.mobilesystems.ledcontrol.R;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.GamutArea;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.GamutTypes;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.Line;
+import fi.aalto.mobilesystems.ledcontrol.ledcontrol.PointF;
 
 
 public class DiskoLightActivity extends AppCompatActivity {
@@ -87,6 +95,25 @@ public class DiskoLightActivity extends AppCompatActivity {
         AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
         dispatcher.addAudioProcessor(p);
        // new Thread(dispatcher,"Audio Dispatcher").start();
+    }
+
+    public List<PointF> generateRandomLightValues(int n) {
+        GamutArea gamutArea = new GamutArea(GamutTypes.B);
+        Line rgLine = new Line(gamutArea.getRed(), gamutArea.getGreen());
+        Line gbLine = new Line(gamutArea.getGreen(), gamutArea.getBlue());
+        Line brLine = new Line(gamutArea.getBlue(), gamutArea.getRed());
+        List<Line> gamutLines = new ArrayList<>();
+        gamutLines.add(rgLine);
+        gamutLines.add(gbLine);
+        gamutLines.add(brLine);
+        Random rand = new Random();
+        List<PointF> lightValues = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            Line l = gamutLines.get(rand.nextInt(n));
+            double ratio = rand.nextDouble() % 1.0;
+            lightValues.add(l.getPointOnLine(ratio));
+        }
+        return lightValues;
     }
 }
 
