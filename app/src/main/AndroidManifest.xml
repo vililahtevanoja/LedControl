@@ -33,6 +33,8 @@
         <activity android:name=".activities.SetAlarmActivity" />
         <activity android:name=".activities.TimeOfDayActivity"/>
         <activity android:name=".activities.SelectLightColorActivity"></activity>
+        <activity android:name=".activities.SelectLightColorActivity"
+                  android:screenOrientation="portrait"/>
 
         <service android:name=".services.ChangeLightService" />
 
