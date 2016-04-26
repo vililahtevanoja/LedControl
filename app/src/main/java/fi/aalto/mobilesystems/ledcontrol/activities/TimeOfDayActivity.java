@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
+import fi.aalto.mobilesystems.ledcontrol.services.AutomaticTimeOfDay;
 import fi.aalto.mobilesystems.ledcontrol.services.SimpleTimeOfDay;
 
 public class TimeOfDayActivity extends AppCompatActivity {
@@ -59,7 +60,7 @@ public class TimeOfDayActivity extends AppCompatActivity {
         int morningHour = mSharedPreferences.getInt(MORNING_HOUR_PREFKEY, 6);
         int nightHour = mSharedPreferences.getInt(NIGHT_HOUR_PREF_KEY, 22);
         int transition = mSharedPreferences.getInt(TRANSITION_PREF_KEY, 1);
-        mIsAutomatic.setSelected(isAutomatic);
+        mIsAutomatic.setChecked(isAutomatic);
         mIsEnabled.setSelected(isEnabled);
         mMorningHour.setText(String.format(Locale.getDefault(), "%d", morningHour));
         mNightHour.setText(String.format(Locale.getDefault(), "%d", nightHour));
@@ -136,8 +137,8 @@ public class TimeOfDayActivity extends AppCompatActivity {
     private View.OnClickListener saveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            boolean isEnabled = mIsEnabled.isSelected();
-            boolean isAutomatic = mIsAutomatic.isSelected();
+            boolean isEnabled = mIsEnabled.isChecked();
+            boolean isAutomatic = mIsAutomatic.isChecked();
             int morningHour = Integer.parseInt(mMorningHour.getText().toString());
             int nightHour = Integer.parseInt(mNightHour.getText().toString());
             int transitionHours = Integer.parseInt(mTransitionHours.getText().toString());
@@ -148,6 +149,12 @@ public class TimeOfDayActivity extends AppCompatActivity {
             editor.putInt(NIGHT_HOUR_PREF_KEY, nightHour);
             editor.putInt(TRANSITION_PREF_KEY, transitionHours);
             editor.apply();
+            if (isEnabled) {
+                startTimeOfDay();
+            }
+            else {
+                stopTimeOfDay();
+            }
             mCurrentToast.cancel();
             mCurrentToast = Toast.makeText(TimeOfDayActivity.this, "Settings saved", Toast.LENGTH_LONG);
             mCurrentToast.show();
@@ -156,8 +163,20 @@ public class TimeOfDayActivity extends AppCompatActivity {
 
     private void startTimeOfDay() {
         AlarmManager am = (AlarmManager)LedControl.getContext().getSystemService(ALARM_SERVICE);
-        if (mIsAutomatic.isSelected()) {
-
+        if (mIsAutomatic.isChecked()) {
+            Intent startIntent = new Intent(getString(R.string.automatictimeofday_action_start),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            this.startService(startIntent);
+            Intent updateLightingIntent = new Intent(getString(R.string.automatictimeofday_action_update_lighting),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            Intent updateDataIntent = new Intent(getString(R.string.automatictimeofday_action_update_data),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            PendingIntent pendingUpdateLightingIntent = PendingIntent.getService(LedControl.getContext(),
+                    1, updateLightingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingUpdateDataIntent = PendingIntent.getService(LedControl.getContext(),
+                    2, updateDataIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            am.setRepeating(AlarmManager.ELAPSED_REALTIME, 5000L, 60000L, pendingUpdateLightingIntent);
+            am.setRepeating(AlarmManager.ELAPSED_REALTIME, 5000L, 17280000L, pendingUpdateDataIntent);
         }
         else {
             Intent startIntent = new Intent(getString(R.string.simpletimeofday_action_start),
@@ -167,14 +186,27 @@ public class TimeOfDayActivity extends AppCompatActivity {
                     Uri.EMPTY, LedControl.getContext(), SimpleTimeOfDay.class);
             PendingIntent pendingUpdateIntent = PendingIntent.getService(LedControl.getContext(),
                     1, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.setRepeating(AlarmManager.ELAPSED_REALTIME, 3000L, 3000L, pendingUpdateIntent);
+            am.setRepeating(AlarmManager.ELAPSED_REALTIME, 5000L, 60000L, pendingUpdateIntent);
         }
     }
 
     private void stopTimeOfDay() {
         AlarmManager am = (AlarmManager)LedControl.getContext().getSystemService(ALARM_SERVICE);
-        if (mIsAutomatic.isSelected()) {
-
+        boolean isAutomatic = mIsAutomatic.isChecked();
+        if (isAutomatic) {
+            Intent updateLightingIntent = new Intent(getString(R.string.automatictimeofday_action_update_lighting),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            Intent updateDataIntent = new Intent(getString(R.string.automatictimeofday_action_update_data),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            PendingIntent pendingUpdateLightingIntent = PendingIntent.getService(LedControl.getContext(),
+                    1, updateLightingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingUpdateDataIntent = PendingIntent.getService(LedControl.getContext(),
+                    2, updateDataIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pendingUpdateLightingIntent);
+            am.cancel(pendingUpdateDataIntent);
+            Intent stopIntent = new Intent(getString(R.string.automatictimeofday_action_stop),
+                    Uri.EMPTY, LedControl.getContext(), AutomaticTimeOfDay.class);
+            this.startService(stopIntent);
         }
         else {
             Intent updateIntent = new Intent(getString(R.string.simpletimeofday_action_update),

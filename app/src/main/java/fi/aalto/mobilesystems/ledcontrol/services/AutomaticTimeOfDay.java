@@ -238,6 +238,8 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     public void onLocationChanged(Location location) {
         if (location != null) {
             if (this.lastLocation.distanceTo(location) > REFRESH_DISTANCE) {
+                Log.i(TAG, "Location changed, new location lat: "
+                        + location.getLatitude() + ", lon: " + location.getLongitude());
                 this.lastLocation = location;
                 updateSunriseSundown();
             }
