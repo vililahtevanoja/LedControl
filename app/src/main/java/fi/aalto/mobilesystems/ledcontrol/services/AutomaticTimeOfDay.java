@@ -1,7 +1,9 @@
 package fi.aalto.mobilesystems.ledcontrol.services;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -27,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
@@ -46,10 +50,13 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     private static final float REFRESH_DISTANCE = 50000.0f;
     private static final long REFRESH_TIME_INTERVAL = 6 * (60 * 60 * 1000); // 6h
     private static final int TEMPERATURE_CURVE_REFINE_STEPS = 5;
+    private static final String CLASS_PREFERENCE_KEY = "timeofday";
+    private static final String IS_AUTOMATIC_PREFERENCE_KEY = CLASS_PREFERENCE_KEY + ".isAutomatic";
     private Location lastLocation;
     private Calendar sunrise;
     private Calendar sunset;
     private Curve colorTemperatureCurve;
+    private List<PendingIntent> intents;
     private double transitionHours;
     private boolean canGetLocation;
     private boolean enabled;
@@ -231,6 +238,8 @@ public class AutomaticTimeOfDay extends IntentService implements LocationListene
     public void onLocationChanged(Location location) {
         if (location != null) {
             if (this.lastLocation.distanceTo(location) > REFRESH_DISTANCE) {
+                Log.i(TAG, "Location changed, new location lat: "
+                        + location.getLatitude() + ", lon: " + location.getLongitude());
                 this.lastLocation = location;
                 updateSunriseSundown();
             }

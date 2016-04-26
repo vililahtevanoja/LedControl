@@ -41,10 +41,11 @@ public class LedControl extends Application {
         Context ctx = LedControl.getContext();
         String sharedPreferencesKey = ctx.getString(R.string.shared_preferences_key);
         return ctx.getSharedPreferences(sharedPreferencesKey ,Context.MODE_PRIVATE);
+    }
 
-       // BlinkLights blink = new BlinkLights(2);
-       // mBroadcastScene = new HandleBroadcastScene();
-
+    public static SharedPreferences getSharedPreferences(String name) {
+        Context ctx = LedControl.getContext();
+        return ctx.getSharedPreferences(name ,Context.MODE_PRIVATE);
     }
 
     public static String getStringResource(int resId) {

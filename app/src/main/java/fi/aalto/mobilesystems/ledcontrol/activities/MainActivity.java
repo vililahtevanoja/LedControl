@@ -11,12 +11,10 @@ import android.widget.ImageButton;
 
 import fi.aalto.mobilesystems.ledcontrol.LedControl;
 import fi.aalto.mobilesystems.ledcontrol.R;
-import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueController;
 import fi.aalto.mobilesystems.ledcontrol.ledcontrol.HueProperties;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyActivity";
-    private HueController handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +59,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LedControl.getContext(), SetAlarmActivity.class);
                 startActivity(intent);
-                //startActivityForResult(intent, 1);
             }
         });
 
-
+        final ImageButton timeOfDayButton = (ImageButton) findViewById(R.id.setSunButton);
+        timeOfDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LedControl.getContext(), TimeOfDayActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
