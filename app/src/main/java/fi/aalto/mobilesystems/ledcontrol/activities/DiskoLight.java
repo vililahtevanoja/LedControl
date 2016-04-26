@@ -40,8 +40,8 @@ public class DiskoLight implements Runnable {
         int count = 0;
         while (!stopRequested) {
             soundTrack();
-            System.out.println("count: " + count);
-            count++;
+           // System.out.println("count: " + count);
+            // count++;
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException x) {
