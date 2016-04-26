@@ -123,7 +123,7 @@ public class LedControlScheduler extends IntentService implements PHSDKListener,
     @Override
     public void onError(int i, String s) {
         Log.e(TAG, "ERROR " +  Integer.toString(i) + ": " + this.hueErrorToString(i) + " - " + s);
-        if (i == PHHueError.AUTHENTICATION_FAILED) {
+        if (i == 1158) {
             findBridges();
         }
     }
