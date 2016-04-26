@@ -1,6 +1,8 @@
 package fi.aalto.mobilesystems.ledcontrol.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -69,9 +71,22 @@ public class SelectLightColorActivity extends AppCompatActivity {
 
         if(this.sdk.getSelectedBridge() == null)
         {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("No bridge found.")
+                    .setTitle("Oops");
+            AlertDialog dialog = builder.create();
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    });
+            dialog.show();
             Log.d(TAG, "No bridge found");
             return;
         }
+
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
         mNameIdentifierMap = new HashMap<>();
