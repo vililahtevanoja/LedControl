@@ -31,6 +31,7 @@ public class ChangeLightService extends IntentService {
     private PHLight mPHLight;
     private PHBridge bridge;
     private int mColor;
+    private Map<String, Integer> AlarmAlert;
 
     public ChangeLightService() {
         super("ChangeLightService");
@@ -45,7 +46,7 @@ public class ChangeLightService extends IntentService {
         HandleBroadcastScene BroadcastScene = mApplication.getBroadcastScene();
         Map<String, Integer> IncomingCallScene = BroadcastScene.getIncomingCallScene();
         Map<String, Integer> IncomingSMSScene = BroadcastScene.getIncomingSMSScene();
-        Map<String, Integer> AlarmAlert = BroadcastScene.getAlarmAlert();
+       AlarmAlert = BroadcastScene.getAlarmAlert();
 
 
         PHHueSDK sdk= PHHueSDK.getInstance();
@@ -73,7 +74,9 @@ public class ChangeLightService extends IntentService {
 
             case "Alarm":
                 Log.d(TAG, "Alarm Intent Detected.");
-                updateLight(intent.getStringExtra("lightIdentifier"), intent.getIntExtra("color", 0));
+                String strColor = intent.getStringExtra("newColor");
+                Log.d(TAG, "get string color from intent:" + strColor);
+                updateLight(intent.getStringExtra("lightIdentifier"), Integer.parseInt(strColor));
                 break;
 
             case "RestoreAlarm":
@@ -113,6 +116,7 @@ public class ChangeLightService extends IntentService {
     private void updateLight(String lightIdentifier, int color){
 
         mPHLight = mLightsMap.get(lightIdentifier);
+        color =  AlarmAlert.get(lightIdentifier);
         bridge.updateLightState(mPHLight,getPHLightStateWithRGB(mPHLight, color));
         Log.d(TAG, "updateLight with color" + "Light:" + lightIdentifier + " color:" + color);
     }

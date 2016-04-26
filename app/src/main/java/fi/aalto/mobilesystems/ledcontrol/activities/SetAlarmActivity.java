@@ -76,11 +76,9 @@ public class SetAlarmActivity extends AppCompatActivity {
         alarm.SetAlarm(this, mCalendar, lightIdentifier, mColor);
 
         Toast.makeText(SetAlarmActivity.this,
-                "OnClickListener : " +
-                        "\nlightIdentifier: " + lightIdentifier +
+                        "\nlight: " + lightIdentifier +
                         "\ncolor: " + mColor +
-                        "\nHour:" + mHour +
-                        "\nMin:" + mMin,
+                        "\n" + mHour + ":" + mMin,
                 Toast.LENGTH_SHORT).show();
 
         Log.d(TAG,"mHour:" + mHour + " mMin:" + mMin);
@@ -110,8 +108,7 @@ public class SetAlarmActivity extends AppCompatActivity {
                 mColor = data.getIntExtra("color", 0);
 
                 Toast.makeText(SetAlarmActivity.this,
-                        "OnClickListener : " +
-                                "\nlightIdentifier: " + lightIdentifier +
+                                "\nlight: " + lightIdentifier +
                                 "\ncolor: " + mColor,
                         Toast.LENGTH_SHORT).show();
             }
