@@ -26,7 +26,8 @@
         </activity>
 
         <activity android:name=".activities.HandleBroadcastActivity" />
-        <activity android:name=".activities.SetAlarmActivity" />
+        <activity android:name=".activities.SetAlarmActivity"
+                  android:screenOrientation="portrait"/>
         <activity android:name=".activities.TimeOfDayActivity"/>
         <activity android:name=".activities.SelectLightColorActivity"
                   android:screenOrientation="portrait"/>
