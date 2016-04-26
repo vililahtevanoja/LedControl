@@ -175,7 +175,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
                         returnIntent.putExtra("lightIdentifier",
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()));
                         returnIntent.putExtra("color", mColor);
-                        setResult(Activity.RESULT_OK, returnIntent);
+                        setResult(Activity.RESULT_CANCELED, returnIntent);
                         mBroadcastScene.removeAlarmAltertScene(
                                 mNameIdentifierMap.get(mSpinner.getSelectedItem()));
                         Log.d(TAG, "Alarm clock: remove light");

@@ -113,6 +113,9 @@ public class SetAlarmActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
+                lightIdentifier = data.getStringExtra("lightIdentifier");
+                Log.d(TAG, "alarm canceled light identifier:" + lightIdentifier);
+                lightIdentifier = null;
                 //Write your code if there's no result
             }
         }
