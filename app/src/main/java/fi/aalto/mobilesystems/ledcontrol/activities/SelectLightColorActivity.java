@@ -65,7 +65,6 @@ public class SelectLightColorActivity extends AppCompatActivity {
         mButtonCancel = (ImageButton) findViewById(R.id.cancelButton);
         mLobsterPicker = (LobsterPicker) findViewById(R.id.lobsterpicker);
         mSpinner = (Spinner) findViewById(R.id.spinnerLight);
-        initialize();
 
         this.sdk = PHHueSDK.getInstance();
 
@@ -86,7 +85,7 @@ public class SelectLightColorActivity extends AppCompatActivity {
             Log.d(TAG, "No bridge found");
             return;
         }
-
+        initialize();
         lights = this.sdk.getSelectedBridge().getResourceCache().getAllLights();
         mBroadcastScene = ((LedControl) this.getApplication()).getBroadcastScene();
         mNameIdentifierMap = new HashMap<>();
@@ -258,6 +257,9 @@ public class SelectLightColorActivity extends AppCompatActivity {
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         super.onDestroy();  // Always call the superclass
+
+        if(msharedPrefs == null)
+            return;
 
         SharedPreferences.Editor prefsEditor = msharedPrefs.edit();
         Gson gson = new Gson();
