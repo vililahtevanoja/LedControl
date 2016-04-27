@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="80dp"
             android:layout_weight="0.69"
-            android:text="Only Once at a Time" />
+            android:text="Single Time" />
 
     </LinearLayout>
 

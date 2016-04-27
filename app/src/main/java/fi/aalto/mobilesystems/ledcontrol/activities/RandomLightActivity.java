@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.philips.lighting.hue.sdk.PHHueSDK;
@@ -27,7 +27,7 @@ public class RandomLightActivity extends AppCompatActivity {
     private static final String TAG = "RandomLightActivity";
     int DELAY;
     CheckBox ShotCheckBox;
-    Button StartBtn, CancelBtn, StartDisko, StopDisko, StartPrecussion, StopPrecussion;
+    ImageButton StartBtn, CancelBtn, StartDisko, StopDisko, StartPrecussion, StopPrecussion;
     EditText EtTime;
     Timer timer;
     RandomBlinkLight task;
@@ -39,7 +39,7 @@ public class RandomLightActivity extends AppCompatActivity {
         setContentView(R.layout.activity_random_light);
         ShotCheckBox = (CheckBox) findViewById(R.id.shot);
         EtTime = (EditText) findViewById(R.id.edt_time);
-        StartBtn = (Button) findViewById(R.id.start);
+        StartBtn = (ImageButton) findViewById(R.id.start);
         StartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -67,7 +67,7 @@ public class RandomLightActivity extends AppCompatActivity {
                 }
             }
         });
-        CancelBtn = (Button) findViewById(R.id.cancel);
+        CancelBtn = (ImageButton) findViewById(R.id.cancel);
         CancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +78,9 @@ public class RandomLightActivity extends AppCompatActivity {
             }
         });
 
-        StartDisko = (Button) findViewById(R.id.btnDiskoOn);
+        StartDisko = (ImageButton) findViewById(R.id.btnDiskoOn);
         final DiskoLight as = new DiskoLight();
+        final PercussionDetector pd = new PercussionDetector();
 
         StartDisko.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,17 +89,25 @@ public class RandomLightActivity extends AppCompatActivity {
                 disko.start();
             }
         });
-        StopDisko = (Button) findViewById(R.id.btnDiskoOff);
+        StopDisko = (ImageButton) findViewById(R.id.btnDiskoOff);
         StopDisko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 as.stopRequest();
+               try {
+                   pd.stopRequest();
+                   if (timer != null) {
+                       timer.cancel();
+                       timer = null;
+                   }
+               }catch(Exception e){}
+
             }
         });
 
 
-        StartPrecussion = (Button) findViewById(R.id.btnPrecussionOn);
-        final PercussionDetector pd = new PercussionDetector();
+        StartPrecussion = (ImageButton) findViewById(R.id.btnPrecussionOn);
+        //final PercussionDetector pd = new PercussionDetector();
 
         StartPrecussion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,11 +117,18 @@ public class RandomLightActivity extends AppCompatActivity {
             }
         });
 
-        StopPrecussion = (Button) findViewById(R.id.btnPrecussionOff);
+        StopPrecussion = (ImageButton) findViewById(R.id.btnPrecussionOff);
         StopPrecussion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pd.stopRequest();
+                try {
+                    pd.stopRequest();
+                    if (timer != null) {
+                        timer.cancel();
+                        timer = null;
+                    }
+                }catch(Exception e){}
             }
         });
 

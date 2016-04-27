@@ -58,8 +58,10 @@ public class PercussionDetector implements Runnable {
             }
         };
         percussionOnsetDetector = new PercussionOnsetDetector(22050, 1024, osh, 50.0, 1.0);
-        dispatcher.addAudioProcessor(percussionOnsetDetector);
-        dispatcher.run();
+        synchronized(this) {
+            dispatcher.addAudioProcessor(percussionOnsetDetector);
+            dispatcher.run();
+        }
     }
 
     public void setLightsToRandom() {
