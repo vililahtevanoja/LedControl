@@ -27,7 +27,7 @@ public class RandomLightActivity extends AppCompatActivity {
     private static final String TAG = "RandomLightActivity";
     int DELAY;
     CheckBox ShotCheckBox;
-    Button StartBtn, CancelBtn, StartDisko, StopDisko;
+    Button StartBtn, CancelBtn, StartDisko, StopDisko, StartPrecussion, StopPrecussion;
     EditText EtTime;
     Timer timer;
     RandomBlinkLight task;
@@ -96,6 +96,26 @@ public class RandomLightActivity extends AppCompatActivity {
             }
         });
 
+
+        StartPrecussion = (Button) findViewById(R.id.btnPrecussionOn);
+        final PercussionDetector pd = new PercussionDetector();
+
+        StartPrecussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Thread perc = new Thread(pd);
+                perc.start();
+            }
+        });
+
+        StopPrecussion = (Button) findViewById(R.id.btnPrecussionOff);
+        StopPrecussion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pd.stopRequest();
+            }
+        });
+
     }
 
     class RandomBlinkLight extends TimerTask {
@@ -122,6 +142,7 @@ public class RandomLightActivity extends AppCompatActivity {
         for (PHLight light : allLights) {
             PHLightState lightState = new PHLightState();
             lightState.setHue(rand.nextInt(MAX_HUE));
+            lightState.setTransitionTime(0);
             this.sdk.getSelectedBridge().updateLightState(light, lightState);
         }
     }

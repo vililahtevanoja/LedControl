@@ -51,34 +51,9 @@ tools:context=".MainActivity">
 
 </LinearLayout>
 
-<LinearLayout
+    <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="100">
-
-    <TextView
-        android:id="@+id/soundHertz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="50dp"
-        android:text="Sound Hertz" />
-
-    <CheckBox
-        android:id="@+id/diskoLight"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="40dp"
-        android:layout_weight="9.24"
-        android:text="Enable Disko Light" />
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="100dp"
     android:orientation="horizontal"
     android:weightSum="400">
 
@@ -102,7 +77,7 @@ tools:context=".MainActivity">
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="130dp"
     android:orientation="horizontal"
     android:weightSum="400">
 
@@ -123,5 +98,29 @@ tools:context=".MainActivity">
         android:layout_weight="145"
         android:text="Stop Disko" />
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:weightSum="400">
+
+        <Button
+            android:id="@+id/btnPrecussionOn"
+            android:layout_width="130dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="30dp"
+            android:layout_weight="145"
+            android:text="Start Precussion" />
+
+        <Button
+            android:id="@+id/btnPrecussionOff"
+            android:layout_width="130dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="145"
+            android:text="Stop Precussion" />
+    </LinearLayout>
 
 </LinearLayout>

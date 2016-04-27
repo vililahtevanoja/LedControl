@@ -45,7 +45,9 @@ public class PercussionDetector implements Runnable {
 
         }
     }
+
     AudioDispatcher dispatcher;
+
     public void soundTrack() {
         dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0);
         OnsetHandler osh = new OnsetHandler() {
@@ -92,7 +94,7 @@ public class PercussionDetector implements Runnable {
         Random rand = new Random();
         List<PointF> lightValues = new LinkedList<>();
         for (int i = 0; i < n; i++) {
-            Line l = gamutLines.get(rand.nextInt(gamutLines.size()-1));
+            Line l = gamutLines.get(rand.nextInt(gamutLines.size() - 1));
             double ratio = rand.nextDouble() % 1.0;
             lightValues.add(l.getPointOnLine(ratio));
         }
