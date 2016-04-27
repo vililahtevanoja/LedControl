@@ -17,12 +17,12 @@
         android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Mention the time to blink lights, default time is 1s" />
+            android:text="Mention the time to blink lights, default time is 1s" />-->
     </LinearLayout>
 
     <LinearLayout
@@ -57,20 +57,22 @@
         android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:src="@drawable/blink_button"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:text="Start Blinking" />
 
-        <Button
+        <ImageButton
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/pause_button"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
@@ -83,19 +85,21 @@
         android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnDiskoOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:src="@drawable/dance_button"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:text="Start Disko" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnDiskoOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/pause_button"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:text="Stop Disko" />
@@ -106,19 +110,21 @@
         android:layout_height="80dp"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnPrecussionOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/clap_button"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:text="Start Precussion" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnPrecussionOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/pause_button"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:text="Stop Precussion" />
