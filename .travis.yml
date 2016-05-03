@@ -3,9 +3,8 @@ before_install:
     - android list sdk --no-ui --all --extended
 android:
     components:
-        - build-tools-23.002
-        - android-22
+        - build-tools-23.0.2
+        - android-23
         - extra-google-google_play_services
-        - sys-img-armeabi-v7a-android-21
         - add-on
         - extra
