@@ -12,7 +12,7 @@ import fi.aalto.mobilesystems.ledcontrol.LedControl;
 
 public class HueProperties {
     private HueProperties(){}
-    private static final String TAG = "HueController";
+    private static final String TAG = "HueProperties";
     private static Properties props = null;
     private final static String propertiesFile = "hue.properties";
     private final static String USERNAME_KEY = "username";
